@@ -23,7 +23,7 @@ class Contacts {
     const response = await Api.post(this.path, data);
     const status = await response.status;
 
-    if (status === 201) {
+    if (status === 200) {
       this.fetchAll();
     }
   }
@@ -31,8 +31,7 @@ class Contacts {
   @action find(contactId) {
     return (
       this.all.slice().filter(
-        c => c.id === parseInt(contactId, 10)
-      )[0]
+        c => c.id === contactId)[0]
     );
   }
 

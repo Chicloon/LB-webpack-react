@@ -11,7 +11,8 @@ class Show extends React.Component {
   render() {
     return (
       <div id='Show'>
-        <h1>{this.state.contact.name}</h1>
+        <h1>`{this.state.contact.first_name} {this.state.contact.first_name}`</h1>
+        <h2>{this.state.contact.email}</h2>
       </div>
     );
   }

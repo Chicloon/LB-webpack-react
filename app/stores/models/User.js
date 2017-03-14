@@ -14,22 +14,22 @@ class User {
     this.setIsLoading(true);
 
     const response = await Api.post(
-      '/sessions',
+      '/Users/login/',
       { email, password }
     );
 
     const status = await response.status;
 
-    if (status == 201) {
-      const body = await response.json();
-      const { user } = body.data;
+    if (status === 200) {
+      const user = await response.json();
 
-      localStorage.setItem('token', user.authentication_token);
-      localStorage.setItem('email', user.email);
+      console.log(user);
+      localStorage.setItem('token', user.id);
+      localStorage.setItem('email', email);
 
       this.setIsLoading(false);
 
-      browserHistory.push('/');
+      // browserHistory.push('/');
     } else {
       console.log('error');
     }
