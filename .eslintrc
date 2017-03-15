@@ -19,7 +19,8 @@
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error",
     "indent": 0,
-    "no-console":"off",
+    "no-var":0,
+    "no-console": ["error", { allow: ["warn", "error", "log"] }],
     "import/no-extraneous-dependencies": ["error", {
       "devDependencies": ['*.config.js']
     }],

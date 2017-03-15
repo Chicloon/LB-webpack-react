@@ -32,10 +32,6 @@
     "dataSource": "db",
     "public": false
   },
-  "CoffeeShop": {
-    "dataSource": "mysqlDs",
-    "public": true
-  },
   "Contacts": {
     "dataSource": "mongoDs",
     "public": true
