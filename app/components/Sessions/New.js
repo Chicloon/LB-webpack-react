@@ -21,8 +21,8 @@ class New extends React.Component {
       <div className={styles.signInForm}>
       <form className='pure-form pure-form-stacked' onSubmit={this.submitForm}>
         <label>Email</label>
-        <input type='email' ref={node => { this.email = node; }}
-               placeholder='email' className='pure-input-1' />
+        <input type='text' ref={node => { this.email = node; }}
+               placeholder='username' className='pure-input-1' />
         <label>Password</label>
         <input type='password' ref={node => { this.password = node; }} className='pure-input-1'/>
         <button className={`pure-button pure-input-1 ${styles.signInButton}`}>
