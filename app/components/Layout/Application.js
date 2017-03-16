@@ -46,6 +46,12 @@ class Application extends React.Component {
             <li className="pure-menu-item">
               {this.checkUser()}
             </li>
+            <li className="pure-menu-item">
+              <Link to="/calendar"
+                className={classNames('pure-menu-heading', styles.headin)}>
+                Calendar
+              </Link>
+            </li>
           </ul>
         </div>
         {this.props.children}

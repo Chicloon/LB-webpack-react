@@ -16,6 +16,8 @@ const routes =
       <IndexRoute component={c.Contacts.Collection} />
       <Route path=':contactId' component={c.Contacts.Show} />
     </Route>
+    <Route path='calendar' component={c.Calendar.Rendering} />
+
   </Route>;
 
 export default routes;
