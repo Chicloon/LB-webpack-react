@@ -35,6 +35,12 @@ export default [
     'end': new Date(2015, 3, 9, 14, 0, 0),
     'author': 'Jack',
   },
+    {
+    'title': 'I HAVE AUTHOR',
+    'start': new Date(2015, 3, 9, 15, 0, 0),
+    'end': new Date(2015, 3, 9, 16, 0, 0),
+    'author': 'Jack',
+  },
   {
     'title': 'Conference',
     'start': new Date(2015, 3, 11),
