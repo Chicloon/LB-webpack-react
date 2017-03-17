@@ -2,6 +2,7 @@ import React from 'react';
 import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
 import events from './events';
+import doctors from './doctors';
 
 import './Calendar.css';
 
@@ -91,7 +92,7 @@ class Rendering extends React.Component {
     }
 
     eventStyleGetter(event) {
-        console.log(event);
+        // console.log(event);
         let backgroundColor = event.author ? 'red' : 'white';
         // if (event.author) {
         //     console.log('У меня есть автор', event);
@@ -114,8 +115,9 @@ class Rendering extends React.Component {
     }
 
     render() {
+        console.log(doctors[0].working.hours);
         let date = new Date();
-        console.log(date);
+        // console.log(date);
         date.setHours(10, 0, 0);
         let maxDate = new Date();
         maxDate.setHours(20, 0, 0);
