@@ -75,8 +75,23 @@
   margin-top: 2em;  
 }
 
+
 @import './toolbar.less';
 @import './event.less';
 @import './month.less';
 @import './agenda.less';
 @import './time-grid.less';
+
+
+ .rbc-month-row {
+display: -ms-flexbox;
+display: flex;
+position: relative;
+-ms-flex-direction: column;
+flex-direction: column;
+-ms-flex: 100px;
+flex: 100px;
+overflow: hidden;
+height: 100%;
+min-height: 100px;
+ }

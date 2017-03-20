@@ -1,7 +1,9 @@
 import Rendering from './Calendar';
-import MyCalendar from './Test';
+import Test from './Test';
+import dnd from './dnd';
 
 export default {
     Rendering,
-    MyCalendar,
+    Test,
+    dnd,
 };

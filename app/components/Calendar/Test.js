@@ -5,7 +5,7 @@ import myEventsList from './events';
 
 // import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './Calendar.css';
-import './less/styles.less';
+// import './less/styles.less';
 
 // const myEventsList = [
 //     {
@@ -95,21 +95,31 @@ import './less/styles.less';
 // to the correct localizer.
 BigCalendar.momentLocalizer(moment); // or globalizeLocalizer
 
-class MyCalendar extends React.Component {
-    render() {
-        return (            
-            <div className='example main'>
-            
-             <BigCalendar
-                    events={myEventsList}
-                    startAccessor='startDate'
-                    endAccessor='endDate'
-                    defaultDate={new Date(2015, 3, 1)}
-                />
-          </div>
-        );
+const messages = {
+    next: "Вперед",
+    previous: "Назад",
+    today: "Сегодня",
+    month: 'Месяц',
+    week: 'Неделя',
+    day: 'День',
+};
 
+class Test extends React.Component {
+    render() {
+        return (
+            <div className='example main'>
+
+                <BigCalendar
+                    events={myEventsList}
+                    min={moment('10:00', 'HH:mm').toDate()}
+                    max={moment('22:00', 'HH:mm').toDate()}
+                    defaultDate={new Date(2015, 3, 1)}
+                    defaultView='week'
+                    messages={messages}
+                />
+            </div>
+        );
     }
 }
 
-export default MyCalendar;
+export default Test;

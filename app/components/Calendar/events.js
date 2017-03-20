@@ -8,31 +8,6 @@ const preMadeEvents = [
     'end': ed,
   },
   {
-    'title': 'All Day Event',
-    'allDay': true,
-    'start': new Date(2015, 3, 0),
-    'end': new Date(2015, 3, 1)
-  },
-  {
-    'title': 'Long Event',
-    'start': new Date(2015, 3, 7),
-    'end': new Date(2015, 3, 10),
-    'author': 'Efim'
-  },
-
-  {
-    'title': 'DTS STARTS',
-    'start': new Date(2016, 2, 13, 0, 0, 0),
-    'end': new Date(2016, 2, 20, 0, 0, 0)
-  },
-
-  {
-    'title': 'DTS ENDS',
-    'start': new Date(2016, 10, 6, 0, 0, 0),
-    'end': new Date(2016, 10, 13, 0, 0, 0)
-  },
-
-  {
     'title': 'Some Event',
     'start': new Date(2015, 3, 9, 12, 0, 0),
     'end': new Date(2015, 3, 9, 13, 0, 0)
@@ -51,8 +26,8 @@ const preMadeEvents = [
   },
   {
     'title': 'Conference',
-    'start': new Date(2015, 3, 11),
-    'end': new Date(2015, 3, 13),
+    'start': new Date(2015, 3, 11, 15, 0, 0),
+    'end': new Date(2015, 3, 11, 17, 0, 0),
     desc: 'Big conference for important people'
   },
   {
@@ -69,8 +44,8 @@ const preMadeEvents = [
   },
   {
     'title': 'Meeting',
-    'start':new Date(2015, 3, 12,14, 0, 0, 0),
-    'end': new Date(2015, 3, 12,15, 0, 0, 0)
+    'start':new Date(2015, 3, 12, 14, 0, 0, 0),
+    'end': new Date(2015, 3, 12, 15, 0, 0, 0)
   },
   {
     'title': 'Happy Hour',
@@ -78,16 +53,6 @@ const preMadeEvents = [
     'end': new Date(2015, 3, 12, 17, 30, 0, 0),
     desc: 'Most important meal of the day'
   },
-  {
-    'title': 'Dinner',
-    'start':new Date(2015, 3, 12, 20, 0, 0, 0),
-    'end': new Date(2015, 3, 12, 21, 0, 0, 0)
-  },
-  {
-    'title': 'Birthday Party',
-    'start':new Date(2015, 3, 13, 7, 0, 0),
-    'end': new Date(2015, 3, 13, 10, 30, 0)
-  }
 ];
 
 
