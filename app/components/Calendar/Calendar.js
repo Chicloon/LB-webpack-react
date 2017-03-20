@@ -5,16 +5,18 @@ import events from './events';
 import doctors from './doctors';
 
 import './Calendar.css';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+// import 'react-big-calendar/lib/less/styles.less';
 
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 
 // import 'react-big-calendar/lib/addons/dragAndDrop/styles.less';
+moment.locale('ru');
 
 const DragAndDropCalendar = withDragAndDrop(BigCalendar);
 
-// import styles from './Calendar.sass';
 
 BigCalendar.momentLocalizer(moment);
 
@@ -53,6 +55,7 @@ class WeekComponent extends React.Component {
         );
     }
 }
+
 
 const WeekHeader = ({ event }) => {
     return <div> asdf </div>;
@@ -114,40 +117,58 @@ class Rendering extends React.Component {
         };
     }
 
+
+
+    MyCustomHeader = () => <div>
+                    CUSTOM HEADER:
+        </div>;
+    
     render() {
         console.log(doctors[0].working.hours);
-        let date = new Date();
-        // console.log(date);
-        date.setHours(10, 0, 0);
-        let maxDate = new Date();
-        maxDate.setHours(20, 0, 0);
 
-        return (
+        const min = moment('10:00', 'HH:mm').toDate();
+        const max = moment('20:00', 'HH:mm').toDate();
+
+        /*return (
             <div id='Calendar' className='main'>
                 <BigCalendar
 
                     culture='ru'
                     views={['week']}
-                    toolbar={true}
+                    toolbar={false}
                     onSelectEvent={this.test}
-                    min={date}
-                    max={maxDate}
+                    min={min}
+                    max={max}
                     events={events}
                     defaultDate={new Date(2015, 3, 6)}
                     defaultView='week'
                     eventPropGetter={this.eventStyleGetter}
+                   
+                />
+            </div>
+        );*/
+ 
+        return (
+            <div className='main'>
+
+                <BigCalendar
+                    
+                    culture='ru'
+                    titleAccessor='author'
+                    defaultView='week'
+                    popup
+                    defaultDate={new Date(2015, 3, 6)}
+                    events={events}
                     components={{
-                        event: Event,
+                        header: this.MyCustomHeader,
                         week: {
-                            event: WeekComponent,
-                            header: EventHeader,
-                        },
+                            header: this.MyCustomHeader,
+                        }
                     }}
                 />
             </div>
+
         );
-
-
         /*return (
             <div className='main'>
                 <DragAndDropCalendar
