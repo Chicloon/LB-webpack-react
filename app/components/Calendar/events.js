@@ -86,14 +86,13 @@ do {
     // console.log(`I'm done do this shit`);
     if (moment(dates[i].end).format('LLL') === ed.format('LLL')) {
         console.log(`I'm done`);
-        console.log(dates);
         over = true;
     }
 
-    if (i === 1000) {
-        console.log(dates);
-        over = true;
-    }
+    // if (i === 1000) {
+    //     console.log(dates);
+    //     over = true;
+    // }
 }
 while (over === false);
 
@@ -106,5 +105,4 @@ preMadeEvents.push({
 
 const events = preMadeEvents.concat(dates);
 
-console.log('events', events);
 export default events;

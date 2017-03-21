@@ -52,6 +52,12 @@ class Application extends React.Component {
                 Calendar
               </Link>
             </li>
+            <li className="pure-menu-item">
+              <Link to="/test"
+                className={classNames('pure-menu-heading', styles.headin)}>
+                Test
+              </Link>
+            </li>
           </ul>
         </div>
         {this.props.children}

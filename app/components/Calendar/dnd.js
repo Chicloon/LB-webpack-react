@@ -1,13 +1,11 @@
 import React from 'react';
 import moment from 'moment';
-import events from './events';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
 import BigCalendar from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 
-// import 'react-big-calendar/lib/addons/dragAndDrop/styles.less';
-import './Calendar.css';
+import events from './events';
 
 const DragAndDropCalendar = withDragAndDrop(BigCalendar);
 
@@ -42,11 +40,11 @@ class Dnd extends React.Component {
     const idx = events.indexOf(event);
     const updatedEvent = { ...event, start, end };
 
-    const nextEvents = [...events]
-    nextEvents.splice(idx, 1, updatedEvent)
+    const nextEvents = [...events];
+    nextEvents.splice(idx, 1, updatedEvent);
 
     this.setState({
-      events: nextEvents
+      events: nextEvents,
     });
 
     alert(`${event.title} was dropped onto ${event.start}`);
@@ -57,6 +55,7 @@ class Dnd extends React.Component {
       <div className='main'>
         <p> Тут будет меню и все такое </p>
         <DragAndDropCalendar
+          defaultDate={new Date(2015, 1, 1)}
           selectable
           messages={messages}
           min = {moment('10:00', 'HH:mm').toDate()}
@@ -64,7 +63,6 @@ class Dnd extends React.Component {
           events={this.state.events}
           onEventDrop={this.moveEvent}
           defaultView='week'
-          defaultDate={new Date(2015, 3, 12)}
         />
       </div>
     );

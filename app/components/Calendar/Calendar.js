@@ -4,8 +4,8 @@ import moment from 'moment';
 import events from './events';
 import doctors from './doctors';
 
-import './Calendar.css';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
+import './Calendar.sass';
+// import 'react-big-calendar/lib/css/react-big-calendar.css';
 // import 'react-big-calendar/lib/less/styles.less';
 
 import HTML5Backend from 'react-dnd-html5-backend';

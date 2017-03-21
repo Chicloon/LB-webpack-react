@@ -1,0 +1,26 @@
+@background-color: white;
+
+#app {
+  background-color: @background-color;
+}
+
+.main {
+  margin: 0 2em;
+  margin-top: 2em;
+  position: relative;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.rbc-time-view .rbc-row {
+    min-height: 0px;
+}
+
+.rbc-time-view .rbc-row div:nth-child(1) {
+    height: 0px !important;
+}
+
+.rbc-header-gutter {
+  color: @background-color;
+}

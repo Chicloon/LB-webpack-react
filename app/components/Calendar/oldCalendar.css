@@ -573,29 +573,20 @@ button.rbc-input::-moz-focus-inner {
   color: white;
 }
 
-.rbc-month-row {
-min-height: 100px;
-}
-
-/*.rbc-time-content {
-    border-top: none;
-    padding-top: 0px;
-}
-.rbc-time-header.rbc-header-overflowing > .rbc-row:nth-of-type(2) {
-    display: none;
-}*/
-
-/*.rbc-time-view .rbc-row div:nth-child(1) {
-    height: 0px !important;
-    
-}
-.rbc-label {
-  min-height: 0px;
-}*/
-
 .main {
-
-  background-color: white;
   margin: 0 2em;
-  margin-top: 2em;  
+  margin-top: 2em;
+  position: relative;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
 }
+
+/*.rbc-time-view .rbc-row {
+    min-height: 0px;
+}
+
+.rbc-time-view .rbc-row div:nth-child(1) {
+    height: 0px !important;
+}*/
+
