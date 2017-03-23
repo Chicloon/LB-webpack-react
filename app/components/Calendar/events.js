@@ -1,5 +1,5 @@
 import moment from 'moment';
-
+import Doctors from './doctors';
 
 const preMadeEvents = [
   {
@@ -64,6 +64,11 @@ const ed = moment(endDate, 'YY/MM/DD HH:mm');
 
 let over = false;
 
+const min=moment('10:00', 'HH:mm').format('HH:mm');
+const max=moment('22:00', 'HH:mm').format('HH:mm');
+
+
+
 const dates = [{
   title: 'Blank',
   start: sd.toDate(),
@@ -73,16 +78,23 @@ const dates = [{
 
 let i = 0;
 do {
-    i++;
     const addNew = {
         title: 'Data',
-        start: dates[i - 1].end,
-        end: moment(dates[i - 1].end).add(1, 'h').toDate(),
+        start: dates[i].end,
+        end: moment(dates[i].end).add(1, 'h').toDate(),
         desc: 'Blank',
     };
+    // console.log(moment(addNew.start, 'HH:mm').format('HH:mm'));
+    // console.log(moment(addNew.start, 'HH:mm').format('HH:mm') >= min);
 
+    if (i & 1) {
+      addNew.title = 'i odd';
+    }
+    // if (moment(addNew.start, 'HH:mm').format('HH:mm') >= min &&
+    // moment(addNew.end, 'HH:mm').format('HH:mm') <= max) {
+    // }
+      dates.push(addNew);
     // dates.push(moment(dates[i-1]).add(1, 'h'));
-    dates.push(addNew);
     // console.log(`I'm done do this shit`);
     if (moment(dates[i].end).format('LLL') === ed.format('LLL')) {
         console.log(`I'm done`);
@@ -93,6 +105,7 @@ do {
     //     console.log(dates);
     //     over = true;
     // }
+    i++;
 }
 while (over === false);
 

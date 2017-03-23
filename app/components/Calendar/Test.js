@@ -31,7 +31,7 @@ class Test extends React.Component {
                 <BigCalendar
                     events={myEventsList}
                     min={moment('10:00', 'HH:mm').toDate()}
-                    max={moment('22:00', 'HH:mm').toDate()}
+                    max={moment('19:00', 'HH:mm').toDate()}
                     defaultDate={new Date(2015, 3, 1)}
                     defaultView='month'
                     messages={messages}
