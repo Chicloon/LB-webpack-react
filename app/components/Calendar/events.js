@@ -97,7 +97,7 @@ do {
     // dates.push(moment(dates[i-1]).add(1, 'h'));
     // console.log(`I'm done do this shit`);
     if (moment(dates[i].end).format('LLL') === ed.format('LLL')) {
-        console.log(`I'm done`);
+        
         over = true;
     }
 

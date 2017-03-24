@@ -35,7 +35,6 @@ class Application extends React.Component {
   }
 
   render() {
-    console.log(this.props.user.signedIn);
     return (
       <div id='Layout' className={styles.layout}>
         <div
