@@ -110,10 +110,11 @@ const specaility = 'terapeft';
 
 const min = moment('10:00', 'HH:mm').format('HH:mm');
 const max = moment('18:00', 'HH:mm').format('HH:mm');
-const startDate = moment('15/04/10 10:00', 'YY/MM/DD HH:mm');
-const endDate = moment('15/04/20 10:00', 'YY/MM/DD HH:mm');
-
-
+const today = moment(new Date()).format('YY/MM/DD');
+console.log(today);
+const startDate = moment(`${today} 10:00`, 'YY/MM/DD HH:mm').toDate();
+const endDate = moment(startDate).add(1, 'months').toDate();
+console.log('start and end', startDate, endDate);
 
 /**
  * функция возвращает массив докторов отфильтрованные по специальности
@@ -169,8 +170,8 @@ const format = (min, max, startDate, endDate, doctors, spec) => {
 
     const newDate = {
         title: 'Blank',
-        start: startDate.toDate(),
-        end: startDate.add(1, 'h').toDate(),
+        start: startDate,
+        end: moment(startDate).add(1, 'h').toDate(),
     };
 
     let over = false;
@@ -207,7 +208,7 @@ const format = (min, max, startDate, endDate, doctors, spec) => {
             dates.push(addNew);
             // console.log(dates[i]);
             // console.log(moment(dates[i].start).format('LLL'), ed.format('LLL'));
-            if (moment(dates[i].start).format('LLL') === endDate.format('LLL')) {
+            if (moment(dates[i].start).format('LLL') === moment(endDate).format('LLL')) {
                 console.log(`I'm doAAAne`);
                 // console.log(dates);
                 over = true;
@@ -234,8 +235,8 @@ format(min, max, startDate, endDate, doctors, 'sergeon');
 
 preMadeEvents.push({
   title: 'Blank',
-  start: startDate.toDate(),
-  end: startDate.add(1, 'h').toDate(),
+  start: startDate,
+  end: moment(startDate).add(1, 'h').toDate(),
 });
 
 const events = preMadeEvents.concat(dates);

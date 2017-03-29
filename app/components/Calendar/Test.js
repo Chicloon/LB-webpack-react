@@ -5,7 +5,7 @@ import React from 'react';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './Calendar.less';
 
-import myEventsList from './events';
+import events from './events';
 
 // Setup the localizer by providing the moment (or globalize) Object
 // to the correct localizer.
@@ -35,10 +35,10 @@ class Test extends React.Component {
                 <p> asdfasdfasdf </p>*/}
                 <BigCalendar
                     onSelectEvent={this.onSelect}
-                    events={myEventsList}
+                    events={events}
                     min={moment('10:00', 'HH:mm').toDate()}
                     max={moment('19:00', 'HH:mm').toDate()}
-                    defaultDate={new Date(2015, 3, 13)}
+                    defaultDate={new Date()}
                     defaultView='week'
                     messages={messages}
                 />
