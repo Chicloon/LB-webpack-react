@@ -21,6 +21,11 @@ const messages = {
 };
 
 class Test extends React.Component {
+
+    onSelect = (e) => {
+        console.log(e);
+    }
+
     render() {
         return (
             <div className='main'>
@@ -29,11 +34,12 @@ class Test extends React.Component {
                 <br /> <br /><br /><br /><br /><br />
                 <p> asdfasdfasdf </p>*/}
                 <BigCalendar
+                    onSelectEvent={this.onSelect}
                     events={myEventsList}
                     min={moment('10:00', 'HH:mm').toDate()}
                     max={moment('19:00', 'HH:mm').toDate()}
-                    defaultDate={new Date(2015, 3, 1)}
-                    defaultView='month'
+                    defaultDate={new Date(2015, 3, 13)}
+                    defaultView='week'
                     messages={messages}
                 />
             </div>

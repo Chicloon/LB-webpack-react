@@ -2,11 +2,11 @@ import moment from 'moment';
 import Doctors from './doctors';
 
 const preMadeEvents = [
-  {
-    'title': 'My event',    
-    'start': sd,
-    'end': ed,
-  },
+  // {
+  //   'title': 'My event',    
+  //   'start': startDate.toDate(),
+  //   'end': endDate.toDate(),
+  // },
   {
     'title': 'Some Event',
     'start': new Date(2015, 3, 9, 12, 0, 0),
@@ -55,65 +55,187 @@ const preMadeEvents = [
   },
 ];
 
+const doctors = [
+    {
+        spec: 'sergeon',
+        name: 'Jon',
+        working: {
+            days: {
+                start: '15/04/10',
+                end: '15/04/12',
+            },
+            hours: {
+                start: '10:00',
+                end: '16:00',
+            },
+        },
+        busy: [
+            {
+                start: '',
+                end: '',
+            },
+        ],
 
-const startDate = '15/04/06 10:00';
-const endDate = '15/04/16 10:00';
+    },
+    {
+        spec: 'terapeft',
+        name: 'Bob',
+        working: {
+            days: {
+                start: '15/04/12',
+                end: '15/07/14',
+            },
+            hours: {
+                start: '10:00',
+                end: '15:00',
+            },
+        },
+        busy: [
+            {
+                start: '15/04/12 12:00',
+                end: '15/04/12 13:00',
+            },
+            {
+                start: '15/04/13 10:00',
+                end: '15/04/13 11:00',
+            },
+        ],
+    },
+];
 
-const sd = moment(startDate, 'YY/MM/DD HH:mm');
-const ed = moment(endDate, 'YY/MM/DD HH:mm');
 
-let over = false;
+const dates = [];
 
-const min=moment('10:00', 'HH:mm').format('HH:mm');
-const max=moment('22:00', 'HH:mm').format('HH:mm');
+const specaility = 'terapeft';
+
+const min = moment('10:00', 'HH:mm').format('HH:mm');
+const max = moment('18:00', 'HH:mm').format('HH:mm');
+const startDate = moment('15/04/10 10:00', 'YY/MM/DD HH:mm');
+const endDate = moment('15/04/20 10:00', 'YY/MM/DD HH:mm');
 
 
 
-const dates = [{
-  title: 'Blank',
-  start: sd.toDate(),
-  end: sd.add(1, 'h').toDate(),
-  desc: 'Black',
-}];
+/**
+ * функция возвращает массив докторов отфильтрованные по специальности
+ * 
+ * @param {Array} doctors - массив докоторов
+ * @param {string} spec - специлальность доктора по которой надо отфильтровать
+ */
 
-let i = 0;
-do {
-    const addNew = {
-        title: 'Data',
-        start: dates[i].end,
-        end: moment(dates[i].end).add(1, 'h').toDate(),
-        desc: 'Blank',
+const filterDoctors = (doctors, spec) => {
+    const selectedDocs = [];
+    const docs = doctors.filter(el => el.spec === spec);
+    console.log('docs from filter', docs);
+    docs.forEach(el => {
+        if (el.working.days.start <= moment(startDate, 'YY/MM/DD HH:mm').format('YY/MM/DD') ||
+            el.working.days.end >= moment(endDate, 'YY/MM/DD HH:mm').format('YY/MM/DD')) {
+            selectedDocs.push(el);
+        }
+    });
+    return selectedDocs;
+};
+
+
+/**
+ * функция выдает массив объектов событий исходя из массива объекта докторов
+ * 
+ * @param {moment().format('HH:mm')} min значения времени в пределах которых идет обработка данных и формируется массив событий
+ * @param {moment().format('HH:mm')} max значения времени в пределах которых идет обработка данных и формируется массив событий
+ * @param {moment().format('YY/MM/DD HH:mm')} startDate дата начала  обработки данных
+ * @param {moment().format('YY/MM/DD HH:mm')} endDate дата окончания обработки данных
+ * @param {Array} doctors массив всех докторов
+ * @param {spring} spec специальность доктора
+ */
+
+
+const format = (min, max, startDate, endDate, doctors, spec) => {
+
+    if (min > max) {
+        throw new Error('Минимальное значение времени начала должно быть меньше времени окончания');
+    }
+
+    if (startDate > endDate) {
+        throw new Error('Начальная дата должна быть мольше конечной');
+    }
+
+    if (!doctors || !Array.isArray(doctors)) {
+        throw new Error('не обнаружил докоторов или ошибка в формате докторов (должен быть массив):');
+    }
+
+    let selectedDocs = doctors;
+    if (spec !== '') {
+        selectedDocs = filterDoctors(doctors, spec);
+    }
+
+    const newDate = {
+        title: 'Blank',
+        start: startDate.toDate(),
+        end: startDate.add(1, 'h').toDate(),
     };
-    // console.log(moment(addNew.start, 'HH:mm').format('HH:mm'));
-    // console.log(moment(addNew.start, 'HH:mm').format('HH:mm') >= min);
 
-    if (i & 1) {
-      addNew.title = 'i odd';
-    }
-    // if (moment(addNew.start, 'HH:mm').format('HH:mm') >= min &&
-    // moment(addNew.end, 'HH:mm').format('HH:mm') <= max) {
-    // }
-      dates.push(addNew);
-    // dates.push(moment(dates[i-1]).add(1, 'h'));
-    // console.log(`I'm done do this shit`);
-    if (moment(dates[i].end).format('LLL') === ed.format('LLL')) {
-        
-        over = true;
-    }
+    let over = false;
+    let i = 0;
+    let startTime, endTime, currentDate;
+    do {
+        startTime = moment(newDate.start).format('HH:mm');
+        endTime = moment(newDate.start).format('HH:mm');
+        currentDate = moment(newDate.start).format('YY/MM/DD');
 
-    // if (i === 1000) {
-    //     console.log(dates);
-    //     over = true;
-    // }
-    i++;
-}
-while (over === false);
+        if (startTime >= min && endTime < max) {
+            const addNew = {
+                title: 'Data',
+                start: newDate.start,
+                end: newDate.end,
+                desc: 'Blank',
+            };
+            // console.log(addNew);
+            for (let x = 0; x < selectedDocs.length; x++) {
+                // console.log(selectedDocs[x].working.days, startTime, endTime);
+                // console.log(selectedDocs[x].working.days, currentDate);
+                if (selectedDocs[x].working.hours.start <= startTime
+                    && selectedDocs[x].working.hours.end > endTime
+                    && selectedDocs[x].working.days.start <= currentDate
+                    && selectedDocs[x].working.days.end >= currentDate
+                ) {
+                    // console.log('match');
+                    addNew.title = `Dr. ${selectedDocs[x].name}`;
+                } else {
+                    addNew.title = 'NA';
+                }
+            }
+
+            dates.push(addNew);
+            // console.log(dates[i]);
+            // console.log(moment(dates[i].start).format('LLL'), ed.format('LLL'));
+            if (moment(dates[i].start).format('LLL') === endDate.format('LLL')) {
+                console.log(`I'm doAAAne`);
+                // console.log(dates);
+                over = true;
+                console.log(dates);
+            }
+            i++;
+        }
+
+        newDate.start = newDate.end;
+        newDate.end = moment(newDate.end).add(1, 'h').toDate();
+
+        // защита от переполнения
+        if (i === 10000) {
+            // console.log(dates);
+            over = true;
+            console.warn('Больно большой массв', dates);
+        }
+    }
+    while (!over);
+};
+
+format(min, max, startDate, endDate, doctors, 'sergeon');
 
 
 preMadeEvents.push({
   title: 'Blank',
-  start: sd.toDate(),
-  end: sd.add(1, 'h').toDate(),
+  start: startDate.toDate(),
+  end: startDate.add(1, 'h').toDate(),
 });
 
 const events = preMadeEvents.concat(dates);

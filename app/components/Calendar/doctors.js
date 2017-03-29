@@ -51,7 +51,7 @@ const doctors = [
         spec: 'sergeon',
         name: 'Jon',
         working: {
-            dates: {
+            days: {
                 start: '15/04/10',
                 end: '15/04/12',
             },
@@ -60,6 +60,12 @@ const doctors = [
                 end: '16:00',
             },
         },
+        busy: [
+            {
+                start: '',
+                end: '',
+            },
+        ],
 
     },
     {
@@ -89,100 +95,27 @@ const doctors = [
 ];
 
 
-const startDate = '15/04/13 10:00';
-const endDate = '15/04/20 10:00';
-// const sd = moment(startDate, 'YY/MM/DD HH:mm').format();
-const sd = moment(startDate, 'YY/MM/DD HH:mm');
-// console.log('--------------------');
-// console.log(sd, m);
-// console.log('--------------------');
-// console.log(moment(sd).add(1, 'h'), m.add(1, 'd'));
-// console.log(moment(sd).add(1, 'd').d === m.add(1, 'd').d);
-const ed = moment(endDate, 'YY/MM/DD HH:mm');
-
-// let sdDate = moment(sd).toDate();
-
-// console.log(sdDate, moment(sdDate).add(1, 'd').toDate());
-
-let newDate = {
-    title: 'Blank',
-    start: sd.toDate(),
-    end: sd.add(1, 'h').toDate(),
-};
-
-// console.log(moment(docWorking, 'YY/MM/DD HH:mm').toDate());
-
 const dates = [];
+
+const specaility = 'terapeft';
+
 const min = moment('10:00', 'HH:mm').format('HH:mm');
 const max = moment('18:00', 'HH:mm').format('HH:mm');
+const startDate = moment('15/04/13 10:00', 'YY/MM/DD HH:mm');
+const endDate = moment('15/04/20 10:00', 'YY/MM/DD HH:mm');
 
-const getFreeDocTime = (docs) => {
-    const freeTime = [];
-    const busyTime = [];
 
-    docs.forEach(doc => {
-        console.log('doc', doc);
 
-        const currentTime = {
-            start: moment(`${doc.working.days.start} ${doc.working.hours.start}`, 'YY/MM/DD HH:mm').toDate(),
-            end: moment(`${doc.working.days.start} ${doc.working.hours.start}`, 'YY/MM/DD HH:mm').add(1, 'h').toDate(),
-        };
+/**
+ * функция возвращает массив докторов отфильтрованные по специальности
+ * 
+ * @param {Array} doctors - массив докоторов
+ * @param {string} spec - специлальность доктора по которой надо отфильтровать
+ */
 
-        let fin = true;
-        let c = 0;
-        do {
-            currentTime.start = currentTime.end;
-            currentTime.end = moment(currentTime.start).add(1, 'h').toDate();
-
-            let passIteration = false;
-            for (let busyCouter = 0; busyCouter < doc.busy.length; busyCouter++) {
-                if (moment(currentTime.start).format('YY/MM/DD HH:mm') === doc.busy[busyCouter].start) {
-                    console.log('passing iteraton');
-                    busyTime.push({
-                        start: currentTime.start,
-                        end: currentTime.end,
-                    });
-                    passIteration = true;
-                }
-            }
-            if (passIteration) {
-                continue;
-            }
-            freeTime.push({
-                start: currentTime.start,
-                end: currentTime.end,
-            });
-            // console.log(passIteration);
-            // console.log('currentTime', currentTime);
-            c++;
-            if (c > 10) {
-                fin = false;
-            }
-            if (currentTime.start === moment(`${doc.working.days.end} ${doc.working.hours.end}`, 'YY/MM/DD HH:mm').add(1, 'h').toDate()) {
-                fin = true;
-            }
-        }
-        while (fin);
-    });
-    console.log('free', freeTime);
-    console.log('busy', busyTime);
-
-    // console.log(docs);
-    return 'asdfasdf';
-};
-
-// console.log('doctors', doctors);
-// console.log(selectedDocs);
-
-// const startDate = '15/04/06 10:00';
-// const endDate = '15/04/16 10:00';
-
-const spec = 'terapeft';
-// const selectedDocs = doctors.filter(el => el.spec === spec);
-
-const selectedDocs = [];
-
-const filterDoctors = (docs) => {
+const filterDoctors = (doctors, spec) => {
+    const selectedDocs = [];
+    const docs = doctors.filter(el => el.spec === spec);
     console.log('docs from filter', docs);
     docs.forEach(el => {
         if (el.working.days.start <= moment(startDate, 'YY/MM/DD HH:mm').format('YY/MM/DD') ||
@@ -190,28 +123,51 @@ const filterDoctors = (docs) => {
             selectedDocs.push(el);
         }
     });
+    return selectedDocs;
 };
 
-filterDoctors(doctors.filter(el => el.spec === spec));
 
-const format = () => {
+/**
+ * функция выдает массив объектов событий исходя из массива объекта докторов
+ * 
+ * @param {moment().format('HH:mm')} min значения времени в пределах которых идет обработка данных и формируется массив событий
+ * @param {moment().format('HH:mm')} max значения времени в пределах которых идет обработка данных и формируется массив событий
+ * @param {moment().format('YY/MM/DD HH:mm')} startDate дата начала  обработки данных
+ * @param {moment().format('YY/MM/DD HH:mm')} endDate дата окончания обработки данных
+ * @param {Array} doctors массив всех докторов
+ * @param {spring} spec специальность доктора
+ */
 
-    newDate = {
+
+const format = (min, max, startDate, endDate, doctors, spec) => {
+
+    if (min > max) {
+        throw new Error('Минимальное значение времени начала должно быть меньше времени окончания');
+    }
+
+    if (startDate > endDate) {
+        throw new Error('Начальная дата должна быть мольше конечной');
+    }
+
+    if (!doctors || !Array.isArray(doctors)) {
+        throw new Error('не обнаружил докоторов или ошибка в формате докторов (должен быть массив):');
+    }
+
+    let selectedDocs = doctors;
+    if (spec !== '') {
+        selectedDocs = filterDoctors(doctors, spec);
+    }
+
+    const newDate = {
         title: 'Blank',
-        start: sd.toDate(),
-        end: sd.add(1, 'h').toDate(),
+        start: startDate.toDate(),
+        end: startDate.add(1, 'h').toDate(),
     };
 
     let over = false;
     let i = 0;
     let startTime, endTime, currentDate;
     do {
-        // newDate = {
-        //     start: dates[i].end,
-        //     end: moment(dates[i].end).add(1, 'h').toDate(),
-        // };
-        // console.log(newDate);
-
         startTime = moment(newDate.start).format('HH:mm');
         endTime = moment(newDate.start).format('HH:mm');
         currentDate = moment(newDate.start).format('YY/MM/DD');
@@ -223,16 +179,16 @@ const format = () => {
                 end: newDate.end,
                 desc: 'Blank',
             };
-            console.log(selectedDocs);
+            // console.log(addNew);
             for (let x = 0; x < selectedDocs.length; x++) {
-                console.log(selectedDocs[x].working.hours, startTime, endTime);
-                console.log(selectedDocs[x].working.days, currentDate);
+                // console.log(selectedDocs[x].working.days, startTime, endTime);
+                // console.log(selectedDocs[x].working.days, currentDate);
                 if (selectedDocs[x].working.hours.start <= startTime
                     && selectedDocs[x].working.hours.end >= endTime
                     && selectedDocs[x].working.days.start < currentDate
                     && selectedDocs[x].working.days.end > currentDate
                 ) {
-                    console.log('match');
+                    // console.log('match');
                     addNew.title = selectedDocs[x].spec;
                 } else {
                     addNew.title = 'NA';
@@ -240,7 +196,9 @@ const format = () => {
             }
 
             dates.push(addNew);
-            if (moment(dates[i].end).format('LLL') === ed.format('LLL')) {
+            // console.log(dates[i]);
+            // console.log(moment(dates[i].start).format('LLL'), ed.format('LLL'));
+            if (moment(dates[i].start).format('LLL') === endDate.format('LLL')) {
                 console.log(`I'm doAAAne`);
                 // console.log(dates);
                 over = true;
@@ -252,27 +210,16 @@ const format = () => {
         newDate.start = newDate.end;
         newDate.end = moment(newDate.end).add(1, 'h').toDate();
 
-        // console.log(`I'm done do this shit`);
-
-        if (i === 1000) {
+        // защита от переполнения
+        if (i === 10000) {
             // console.log(dates);
             over = true;
-            console.log(dates);
+            console.warn('Больно большой массв', dates);
         }
     }
     while (!over);
 };
 
-format();
+format(min, max, startDate, endDate, doctors, 'terapeft');
 
-console.log('15/04/12' < '15/04/07');
-
-// console.log(`I'm done`);
-// console.log(sd);
-// console.log(moment(sd).add(1, 'h').format());
-
-// const dateJs = new Date(2016, 0, 1);
-// const date = '16/01/02 10:00';
-// console.log('date', moment(date, 'YY/MM/DD HH:mm').format('LLL'));
-// console.log('dateJs', dateJs);
 export default Doctors;
