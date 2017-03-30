@@ -22,23 +22,23 @@ moment.locale('ru');
 // // // console.log(time);
 
 
-const Doctors = [
-    {
-        id: '1',
-        name: { name: 'Doc1', description: 'Doc1 is a cool doc ' }, // имя данные, и т.д.
-        spesiality: 'spec1', // название специальности и т.д.
-        working: {
-            date: {
-                start: new Date(2017, 0, 1),
-                end: new Date(2017, 1, 0),
-            },
-            hours: {
-                start: '10:00',
-                end: moment('14:00', 'HH:mm').format('HH:mm'),
-            },
-        },  // массив или объект с датами, когда этот врач работает
-    },
-];
+// const Doctors = [
+//     {
+//         id: '1',
+//         name: { name: 'Doc1', description: 'Doc1 is a cool doc ' }, // имя данные, и т.д.
+//         spesiality: 'spec1', // название специальности и т.д.
+//         working: {
+//             date: {
+//                 start: new Date(2017, 0, 1),
+//                 end: new Date(2017, 1, 0),
+//             },
+//             hours: {
+//                 start: '10:00',
+//                 end: moment('14:00', 'HH:mm').format('HH:mm'),
+//             },
+//         },  // массив или объект с датами, когда этот врач работает
+//     },
+// ];
 
 // console.log('form db', Doctors[0].working.hours.start);
 // console.log('date from db', moment(Doctors[0].working.hours.start, 'HH:mm').format('LLL'));
@@ -53,7 +53,7 @@ const doctors = [
         working: {
             days: {
                 start: '15/04/10',
-                end: '15/04/12',
+                end: moment(new Date()).format('YY/MM/DD'),
             },
             hours: {
                 start: '10:00',
@@ -74,7 +74,7 @@ const doctors = [
         working: {
             days: {
                 start: '15/04/12',
-                end: '15/07/14',
+                end: moment(new Date()).format('YY/MM/DD'),
             },
             hours: {
                 start: '10:00',
@@ -83,12 +83,12 @@ const doctors = [
         },
         busy: [
             {
-                start: '15/04/12 12:00',
-                end: '15/04/12 13:00',
+                start: `${moment(new Date()).format('YY/MM/DD')} 10:00`,
+                end: `${moment(new Date()).format('YY/MM/DD')} 11:00`,
             },
             {
-                start: '15/04/13 10:00',
-                end: '15/04/13 11:00',
+                start: `${moment(new Date()).format('YY/MM/DD')} 12:00`,
+                end: `${moment(new Date()).format('YY/MM/DD')} 13:00`,
             },
         ],
     },
@@ -220,6 +220,6 @@ const format = (min, max, startDate, endDate, doctors, spec) => {
     while (!over);
 };
 
-format(min, max, startDate, endDate, doctors, 'terapeft');
+// format(min, max, startDate, endDate, doctors, 'terapeft');
 
-export default Doctors;
+export default doctors;

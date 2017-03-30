@@ -4,7 +4,7 @@ import moment from 'moment';
 import events from './events';
 import doctors from './doctors';
 
-import './Calendar.sass';
+import './Calendar.less';
 // import 'react-big-calendar/lib/css/react-big-calendar.css';
 // import 'react-big-calendar/lib/less/styles.less';
 

@@ -1,5 +1,5 @@
 import moment from 'moment';
-import Doctors from './doctors';
+import doctors from './doctors';
 
 const preMadeEvents = [
   // {
@@ -55,58 +55,11 @@ const preMadeEvents = [
   },
 ];
 
-const doctors = [
-    {
-        spec: 'sergeon',
-        name: 'Jon',
-        working: {
-            days: {
-                start: '15/04/10',
-                end: '15/04/12',
-            },
-            hours: {
-                start: '10:00',
-                end: '16:00',
-            },
-        },
-        busy: [
-            {
-                start: '',
-                end: '',
-            },
-        ],
-
-    },
-    {
-        spec: 'terapeft',
-        name: 'Bob',
-        working: {
-            days: {
-                start: '15/04/12',
-                end: '15/07/14',
-            },
-            hours: {
-                start: '10:00',
-                end: '15:00',
-            },
-        },
-        busy: [
-            {
-                start: '15/04/12 12:00',
-                end: '15/04/12 13:00',
-            },
-            {
-                start: '15/04/13 10:00',
-                end: '15/04/13 11:00',
-            },
-        ],
-    },
-];
 
 
 const dates = [];
 
-const specaility = 'terapeft';
+const specaility = '';
 
 const min = moment('10:00', 'HH:mm').format('HH:mm');
 const max = moment('18:00', 'HH:mm').format('HH:mm');
@@ -167,11 +120,12 @@ const format = (min, max, startDate, endDate, doctors, spec) => {
     if (spec !== '') {
         selectedDocs = filterDoctors(doctors, spec);
     }
+    console.log(selectedDocs);
 
     const newDate = {
         title: 'Blank',
         start: startDate,
-        end: moment(startDate).add(1, 'h').toDate(),
+        end: moment(startDate).add(1, 'h').toDate(),        
     };
 
     let over = false;
@@ -183,8 +137,8 @@ const format = (min, max, startDate, endDate, doctors, spec) => {
         currentDate = moment(newDate.start).format('YY/MM/DD');
 
         if (startTime >= min && endTime < max) {
-            const addNew = {
-                title: 'Data',
+            let addNew = {
+                title: [],
                 start: newDate.start,
                 end: newDate.end,
                 desc: 'Blank',
@@ -199,12 +153,11 @@ const format = (min, max, startDate, endDate, doctors, spec) => {
                     && selectedDocs[x].working.days.end >= currentDate
                 ) {
                     // console.log('match');
-                    addNew.title = `Dr. ${selectedDocs[x].name}`;
+                    addNew.title.push(`Dr. ${selectedDocs[x].name}`);
                 } else {
                     addNew.title = 'NA';
                 }
             }
-
             dates.push(addNew);
             // console.log(dates[i]);
             // console.log(moment(dates[i].start).format('LLL'), ed.format('LLL'));
@@ -230,7 +183,7 @@ const format = (min, max, startDate, endDate, doctors, spec) => {
     while (!over);
 };
 
-format(min, max, startDate, endDate, doctors, 'sergeon');
+format(min, max, startDate, endDate, doctors, '');
 
 
 preMadeEvents.push({
