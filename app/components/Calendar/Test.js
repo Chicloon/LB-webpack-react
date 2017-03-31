@@ -9,6 +9,7 @@ import events from './events';
 
 // Setup the localizer by providing the moment (or globalize) Object
 // to the correct localizer.
+moment.locale('ru');
 BigCalendar.momentLocalizer(moment); // or globalizeLocalizer
 
 const messages = {
@@ -21,20 +22,24 @@ const messages = {
 };
 
 const formats = {
-    dateFormat: 'Z',
-    timeGutterFormat: 'h',
-//   dayFormat: (date, culture, localizer) =>
-//     localizer.format(date, 'DDD', culture),
+    dateFormat: 'dd',
+    dayFormat: (date, culture, localizer) =>
+        localizer.format(date, 'dd DD MMM ', culture),
+    timeGutterFormat: 'HH:mm',
+    //   dayFormat: (date, culture, localizer) =>
+    //     localizer.format(date, 'DDD', culture),
 
-//   dayRangeHeaderFormat: ({ start, end }, culture, local) =>
-//     local.format(start, { date: 'short' }, culture) + ' — ' +
-//     local.format(end, { date: 'short' }, culture)
+    eventTimeRangeFormat: ({ start, end }, culture, local) => null //убираем отображение времени
 };
 
 class Test extends React.Component {
 
     onSelect = (e) => {
         console.log(e);
+
+        return {
+            view: 'day',
+        };
     }
 
 
@@ -85,25 +90,89 @@ class Test extends React.Component {
         };
     }
 
+    eventNavigate = () => {
+        console.log('navigate');
+    }
+
+    title = () => {
+        return <span> this is a header </span>;
+    }
+
+    CustomToolbar = (toolbar) => {
+        const date = moment(toolbar.date);
+
+        const goToBack = () => {
+            toolbar.date.setDate(toolbar.date.getDate() - 7);
+            toolbar.onNavigate('prev');
+        };
+
+        const goToNext = () => {
+            toolbar.date.setDate(toolbar.date.getDate() + 7);
+            toolbar.onNavigate('next');
+        };
+
+        const goToCurrent = () => {
+            const now = moment();
+            toolbar.date.setFullYear(now.format('YYYY'), now.format('MM') - 1, now.format('DD'));
+            toolbar.onNavigate('current');
+        };
+
+        // const label = () => {
+
+        //     return (
+        //         <span><b>{date.format('MMMM')}</b><span> {date.format('DD')} - {date.add(7, 'd').format('DD')}</span></span>
+        //     );
+        // };
+
+        const prevButton = () => {
+            if (date < moment().subtract(30, 'd')) {
+                return null;
+            }
+            return <button className={['btn-back']} onClick={goToBack}>&#8249;</button>;
+        };
+
+        const nextButton = () => {
+            if (date > moment().add(30, 'd')) {
+                return null;
+            }
+            return <button className={['btn-next']} onClick={goToNext}>&#8250;</button>;
+        };
+
+        return (
+            <div className={['toolbar-container']}>
+                {/*<label className={['label-date']}>{label()}</label>*/}
+
+                <div className={['back-next-buttons']}>
+                    {prevButton()}
+                    <button className={['btn-current']} onClick={goToCurrent}>Сегодня</button>
+                    {nextButton()}
+
+
+                </div>
+            </div >
+        );
+    };
+
+
     render() {
         return (
             <div className='main'>
-                {/*<p> adfl;askjdfas df </p>
-                <br /> <br /><br /><br /><br /><br />
-                <br /> <br /><br /><br /><br /><br />
-                <p> asdfasdfasdf </p>*/}
                 <BigCalendar
                     onSelectEvent={this.onSelect}
                     events={events}
+                    views={['week']}
                     min={moment('10:00', 'HH:mm').toDate()}
                     max={moment('19:00', 'HH:mm').toDate()}
                     defaultDate={new Date()}
                     defaultView='week'
                     messages={messages}
                     formats={formats}
+                    onNavigate={this.eventNavigate}
                     eventPropGetter={this.eventStyleGetter}
+                    titleAccessor={this.title}
                     components={{
                         event: this.Event,
+                        toolbar: this.CustomToolbar,
                         week: {
                             time: this.EventHeader,
                             event: this.EventWeek,
