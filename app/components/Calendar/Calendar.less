@@ -39,27 +39,28 @@
       z-index: 0;
 }
 .Modal {
-    margin-top: 2em;
+    // margin-top: 2em;
     position: absolute;
-    top: 40px;
-    left: 40px;
-    right: 40px;
-    bottom: 40px;
+    top: 140px;
+    left: 140px;
+    right: 140px;
+    bottom: 140px;
     background-color: blue;
     // background-color: rgba(0, 0, 0, 0.5);
     opacity: 0.9;
+    z-index: 2;
   }
 
-  .Overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    // opacity: 0.5;
-    background-color: rgba(0, 0, 0, 0.5);
-    // background-color: rebeccapurple;
-  }
+.Overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  // opacity: 0.5;
+  background-color: rgba(0, 0, 0, 0.3);
+  // background-color: rebeccapurple;
+}
 
 .closeModal {
 	background: #606061;
@@ -72,12 +73,24 @@
 	width: 28px;
 	text-decoration: none;
 	font-weight: bold;
-	
 	border-radius: 50%;
-	
 	box-shadow: 1px 1px 3px #000;
 }
 
 .closeModal:hover { 
   background: blue; 
   }
+
+.pop-up {
+    position: absolute;
+    top: 140px;
+    left: 140px;
+    right: 140px;
+    bottom: 140px;
+    background-color: blue;
+    // background-color: rgba(0, 0, 0, 0.5);
+    // opacity: 0.9;
+    z-index: 2;
+    border-radius: 15px;
+    padding: 1em;
+}

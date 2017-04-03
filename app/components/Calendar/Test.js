@@ -54,6 +54,7 @@ const formats = {
 
     eventTimeRangeFormat: ({ start, end }, culture, local) => null //убираем отображение времени
 };
+
 @observer(['events'])
 class Test extends React.Component {
 
@@ -171,24 +172,87 @@ class Test extends React.Component {
         this.setState({ showModal: false });
     }
 
+    modalStyle = {
+        content: {
+            position: 'absolute',
+            top: '140px',
+            left: '140px',
+            right: '140px',
+            bottom: '140px',
+            // border: '1px solid #ccc',
+            background: '#fff',
+            // overflow: 'auto',
+            // WebkitOverflowScrolling: 'touch',
+            // borderRadius: '4px',
+            // outline: 'none',
+            // padding: '20px',
+            // zindex: '1',
+        },
+        overlay: {
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.75)'
+        },
+    }
+
+
     onSelect = (e) => {
+        console.log(e);
+        console.log(e.nativeEvent);
         this.setState({
             showModal: true,
             dates: `${moment(e.start).format('MM/DD HH:mm')} - ${moment(e.end).format('MM/DD HH:mm')}`,
         });
+        const top = this.coords.windowY - this.coords.mouseX;
+        const bottom = top + 100;
+        console.log(this.coords);
+        console.log('x', this.state.x);
+        this.modalStyle = {
+            content: {
+                top,
+                bottom,
+            },
+        };
+    }
 
+    coords = {}
+    modalStyle = {}
+
+    getCoords = (event) => {
+        const e = event.nativeEvent;
+        this.coords.mouseX = e.screenX;
+        this.coords.mouseY = e.screenY;
+        this.setState({
+            x: e.screenX,
+        });
+        // console.log(event, e);
+        this.coords.windowY = window.innerHeight;
+        this.coords.windowX = window.innerWidth;
+        this.modalStyle = {
+            top: this.coords.windowY - this.coords.mouseX,
+            bottom: this.coords.windowY - this.coords.mouseX + 100,
+        };
+        console.log(this.coords);
+    }
+
+    test = (e) => {
+        console.log(e)
     }
 
     render() {
         return (
             <div>
-                <div className='main'>
+                <div className='main' onClick={this.getCoords}>
                     <Modal
                         isOpen={this.state.showModal}
                         contentLabel="onRequestClose Example"
                         onRequestClose={this.handleCloseModal}
                         className="Modal"
                         overlayClassName="Overlay"
+                        style={this.modalStyle}
                     >
                         <button onClick={this.handleCloseModal} className="closeModal">X</button>
                         <p>Modal {this.state.dates} text!</p>
