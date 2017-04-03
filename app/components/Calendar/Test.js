@@ -1,16 +1,39 @@
 import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
 import React from 'react';
+import Modal from 'react-modal';
+import { observer } from 'mobx-react';
+
+
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './Calendar.less';
 
-import events from './events';
+// import events from './events';
 
 // Setup the localizer by providing the moment (or globalize) Object
 // to the correct localizer.
 moment.locale('ru');
 BigCalendar.momentLocalizer(moment); // or globalizeLocalizer
+
+
+
+
+
+
+// const dates = [];
+
+// const specaility = '';
+
+const min = moment('10:00', 'HH:mm').format('HH:mm');
+const max = moment('18:00', 'HH:mm').format('HH:mm');
+const today = moment(new Date()).format('YY/MM/DD');
+const startDate = moment(`${today} 10:00`, 'YY/MM/DD HH:mm').toDate();
+const endDate = moment(startDate).add(1, 'months').toDate();
+
+
+
+
 
 const messages = {
     next: "Вперед",
@@ -31,17 +54,13 @@ const formats = {
 
     eventTimeRangeFormat: ({ start, end }, culture, local) => null //убираем отображение времени
 };
-
+@observer(['events'])
 class Test extends React.Component {
 
-    onSelect = (e) => {
-        console.log(e);
-
-        return {
-            view: 'day',
-        };
+    componentWillMount() {
+        this.props.events.fetchAll(min, max, startDate, endDate, '');
+        this.setState({ showModal: false });
     }
-
 
     Event = ({ event }) => {
         return (
@@ -68,12 +87,18 @@ class Test extends React.Component {
 
 
     eventStyleGetter(event) {
-        // console.log(event);
-        const backgroundColor = event.title === 'NA' ? 'red' : 'blue';
-        // if (event.author) {
-        //     console.log('У меня есть автор', event);
-        //     backgroundColor = 'red';
-        // }
+        let backgroundColor = 'blue';
+        switch (event.title) {
+            case 'NA':
+                backgroundColor = 'red';
+                break;
+            case 'free':
+                backgroundColor = 'green';
+                break;
+            default:
+                backgroundColor = 'blue';
+        }
+
         const style = {
             backgroundColor,
             borderRadius: '5%',
@@ -88,10 +113,6 @@ class Test extends React.Component {
         return {
             style,
         };
-    }
-
-    eventNavigate = () => {
-        console.log('navigate');
     }
 
     title = () => {
@@ -117,13 +138,6 @@ class Test extends React.Component {
             toolbar.onNavigate('current');
         };
 
-        // const label = () => {
-
-        //     return (
-        //         <span><b>{date.format('MMMM')}</b><span> {date.format('DD')} - {date.add(7, 'd').format('DD')}</span></span>
-        //     );
-        // };
-
         const prevButton = () => {
             if (date < moment().subtract(30, 'd')) {
                 return null;
@@ -140,45 +154,76 @@ class Test extends React.Component {
 
         return (
             <div className={['toolbar-container']}>
-                {/*<label className={['label-date']}>{label()}</label>*/}
-
                 <div className={['back-next-buttons']}>
                     {prevButton()}
                     <button className={['btn-current']} onClick={goToCurrent}>Сегодня</button>
                     {nextButton()}
-
-
                 </div>
             </div >
         );
     };
 
+    handleOpenModal = () => {
+        this.setState({ showModal: true });
+    }
+
+    handleCloseModal = () => {
+        this.setState({ showModal: false });
+    }
+
+    onSelect = (e) => {
+        this.setState({
+            showModal: true,
+        });
+        this.setState({
+            dates: `${moment(e.start).format('MM/DD HH:mm')} - ${moment(e.end).format('MM/DD HH:mm')}`,
+
+        });
+            
+        console.log(this.props);
+        
+        // this.handleOpenModal();
+        // this.props.events.addNew(e);
+    }
 
     render() {
         return (
-            <div className='main'>
-                <BigCalendar
-                    onSelectEvent={this.onSelect}
-                    events={events}
-                    views={['week']}
-                    min={moment('10:00', 'HH:mm').toDate()}
-                    max={moment('19:00', 'HH:mm').toDate()}
-                    defaultDate={new Date()}
-                    defaultView='week'
-                    messages={messages}
-                    formats={formats}
-                    onNavigate={this.eventNavigate}
-                    eventPropGetter={this.eventStyleGetter}
-                    titleAccessor={this.title}
-                    components={{
-                        event: this.Event,
-                        toolbar: this.CustomToolbar,
-                        week: {
-                            time: this.EventHeader,
-                            event: this.EventWeek,
-                        }
-                    }}
-                />
+            <div>
+                <div className='main'>
+                    <Modal
+                        isOpen={this.state.showModal}
+                        contentLabel="onRequestClose Example"
+                        onRequestClose={this.handleCloseModal}
+                        className="Modal"
+                        overlayClassName="Overlay"
+                    >
+                        <button onClick={this.handleCloseModal} className="closeModal">X</button>
+                        <p>Modal {this.state.dates} text!</p>
+
+                    </Modal>
+                    <BigCalendar
+                        onSelectEvent={this.onSelect}
+                        events={this.props.events.dates.slice()}
+                        views={['week']}
+                        min={moment('10:00', 'HH:mm').toDate()}
+                        max={moment('19:00', 'HH:mm').toDate()}
+                        defaultDate={new Date()}
+                        defaultView='week'
+                        messages={messages}
+                        formats={formats}
+                        onNavigate={this.eventNavigate}
+                        eventPropGetter={this.eventStyleGetter}
+                        titleAccessor={this.title}
+                        components={{
+                            event: this.Event,
+                            toolbar: this.CustomToolbar,
+                            week: {
+                                time: this.EventHeader,
+                                event: this.EventWeek,
+                            },
+                        }}
+                    />
+                </div>
             </div>
         );
     }
