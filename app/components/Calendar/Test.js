@@ -174,16 +174,9 @@ class Test extends React.Component {
     onSelect = (e) => {
         this.setState({
             showModal: true,
-        });
-        this.setState({
             dates: `${moment(e.start).format('MM/DD HH:mm')} - ${moment(e.end).format('MM/DD HH:mm')}`,
-
         });
-            
-        console.log(this.props);
-        
-        // this.handleOpenModal();
-        // this.props.events.addNew(e);
+
     }
 
     render() {
