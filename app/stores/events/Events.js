@@ -18,7 +18,7 @@ class Events {
             },
             hours: {
                 start: '10:00',
-                end: '16:00',
+                end: '19:00',
             },
         },
         busy: [

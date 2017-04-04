@@ -102,14 +102,18 @@ class Test extends React.Component {
 
         const style = {
             backgroundColor,
-            borderRadius: '5%',
-            opacity: 0.8,
-            color: 'black',
-            border: '2px',
-            display: 'block',
-            left: '5%',
-            widht: '90%',
-            size: '4px',
+            // display: 'absolute',
+            // borderRadius: '5px',
+            // margin: 'auto, auto',
+            // // marginTop: '5px',
+            // // marginBottom: '5px',
+            // opacity: 1,
+            // color: 'black',
+            // border: '2px',
+            // left: '10px',
+            width: '95%',
+            // height: '90%',
+            
         };
         return {
             style,
@@ -174,13 +178,13 @@ class Test extends React.Component {
 
     modalStyle = {
         content: {
-            position: 'absolute',
-            top: '140px',
-            left: '140px',
-            right: '140px',
-            bottom: '140px',
+            // position: 'absolute',
+            // top: '140px',
+            // left: '140px',
+            // right: '40px',
+            // bottom: '140px',
             // border: '1px solid #ccc',
-            background: '#fff',
+            // background: '#fff',
             // overflow: 'auto',
             // WebkitOverflowScrolling: 'touch',
             // borderRadius: '4px',
@@ -188,64 +192,83 @@ class Test extends React.Component {
             // padding: '20px',
             // zindex: '1',
         },
-        overlay: {
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.75)'
-        },
+        // overlay: {
+        //     position: 'fixed',
+        //     top: 0,
+        //     left: 0,
+        //     right: 0,
+        //     bottom: 0,
+        //     backgroundColor: 'rgba(0, 0, 0, 0.75)'
+        // },
     }
 
+
+    modalInfo = {};
 
     onSelect = (e) => {
         console.log(e);
-        console.log(e.nativeEvent);
+        console.log(e.title.slice());
+
+        this.modalInfo = {
+            dates: `${moment(e.start).format('MM/DD HH:mm')} - ${moment(e.end).format('MM/DD HH:mm')}`,
+            doctors: e.title.slice(),
+        }
+            
+            
         this.setState({
             showModal: true,
-            dates: `${moment(e.start).format('MM/DD HH:mm')} - ${moment(e.end).format('MM/DD HH:mm')}`,
+        
         });
-        const top = this.coords.windowY - this.coords.mouseX;
-        const bottom = top + 100;
-        console.log(this.coords);
-        console.log('x', this.state.x);
-        this.modalStyle = {
-            content: {
-                top,
-                bottom,
-            },
-        };
+        // const top = this.coords.mouseY - 32;
+        // // const bottom = top + 100;
+        // console.log(this.coords);
+        // console.log('x', this.state.x);
+        // this.modalStyle.content = this.coords;
+        console.log(this.modalStyle.content);
+        // this.modalStyle = {
+        //     content: {
+        //         top,
+        //         // bottom,
+        //     },
+        // };
+        
+
     }
-
-    coords = {}
-    modalStyle = {}
-
+        
     getCoords = (event) => {
         const e = event.nativeEvent;
-        this.coords.mouseX = e.screenX;
-        this.coords.mouseY = e.screenY;
-        this.setState({
-            x: e.screenX,
-        });
-        // console.log(event, e);
-        this.coords.windowY = window.innerHeight;
-        this.coords.windowX = window.innerWidth;
-        this.modalStyle = {
-            top: this.coords.windowY - this.coords.mouseX,
-            bottom: this.coords.windowY - this.coords.mouseX + 100,
+        // this.coords.mouseX = e.clientX;
+        // this.coords.mouseY = e.clientY;
+        // this.setState({
+        //     x: e.screenX,
+        // });
+        // // console.log(event, e);
+        // this.coords.windowX = window.innerWidth;
+        // this.coords.windowY = window.innerHeight;
+        // // console.log(this.coords);
+        // console.log(e.path);
+        const rect = e.path[0].getBoundingClientRect();
+        const someSpace = 50;
+        this.modalStyle.content = {
+            top: rect.top - someSpace + 'px',
+            bottom: window.innerHeight - rect.bottom - someSpace + 'px',
+            left: rect.left - someSpace + 'px',
+            right: window.innerWidth - rect.right - 2*someSpace + 'px',
         };
-        console.log(this.coords);
+        // console.log(this.modalStyle);
+
+        
+        // console.log(rect);
     }
 
     test = (e) => {
-        console.log(e)
+        console.log(e.nativeEvent);
     }
 
     render() {
         return (
             <div>
-                <div className='main' onClick={this.getCoords}>
+                <div className='main' onMouseMove={this.getCoords} onClick={this.test}>
                     <Modal
                         isOpen={this.state.showModal}
                         contentLabel="onRequestClose Example"
@@ -255,7 +278,24 @@ class Test extends React.Component {
                         style={this.modalStyle}
                     >
                         <button onClick={this.handleCloseModal} className="closeModal">X</button>
-                        <p>Modal {this.state.dates} text!</p>
+                        <p> Выберете врача </p>
+                        <form action="" className="">
+                            <select name="doctors">
+                            {this.modalInfo.doctors ? console.log(this.modalInfo.doctors) : ''}
+                                {this.modalInfo.doctors ? this.modalInfo.doctors.map(doc => {
+                                    console.log(doc);
+                                    return <option value={doc} key={doc}>{doc} </option>;
+
+                                    })
+                                : ''}
+                                
+                            </select>
+                            {/*<input type="submit" className=""> Выбрать врача </input>*/}
+                        </form>
+                        
+
+                        <p>Modal {this.modalInfo.dates} text!</p>
+                        <p> {this.modalInfo.doctors} adsfasd </p>
 
                     </Modal>
                     <BigCalendar
@@ -270,7 +310,7 @@ class Test extends React.Component {
                         formats={formats}
                         onNavigate={this.eventNavigate}
                         eventPropGetter={this.eventStyleGetter}
-                        titleAccessor={this.title}
+                        
                         components={{
                             event: this.Event,
                             toolbar: this.CustomToolbar,

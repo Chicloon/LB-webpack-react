@@ -34,6 +34,7 @@ class Application extends React.Component {
     );
   }
 
+  
   render() {
     return (
       <div id='Layout' className={styles.layout}>
