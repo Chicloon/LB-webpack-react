@@ -88,16 +88,20 @@ class Test extends React.Component {
 
 
     eventStyleGetter(event) {
-        let backgroundColor = 'blue';
-        switch (event.title) {
+        let backgroundColor;
+        // console.log(event);
+        switch (event.status) {
             case 'NA':
                 backgroundColor = 'red';
                 break;
-            case 'free':
+            case 'all free':
                 backgroundColor = 'green';
                 break;
-            default:
+            case 'partially':
                 backgroundColor = 'blue';
+                break;
+            default:
+                backgroundColor = 'gray';
         }
 
         const style = {
@@ -113,7 +117,7 @@ class Test extends React.Component {
             // left: '10px',
             width: '95%',
             // height: '90%',
-            
+
         };
         return {
             style,
@@ -207,17 +211,19 @@ class Test extends React.Component {
 
     onSelect = (e) => {
         console.log(e);
-        console.log(e.title.slice());
+        console.log(e.desc.slice());
 
-        this.modalInfo = {
-            dates: `${moment(e.start).format('MM/DD HH:mm')} - ${moment(e.end).format('MM/DD HH:mm')}`,
-            doctors: e.title.slice(),
+        if (e.desc.slice().indexOf('NA') !== -1) {
+            console.log('нашел NA');
         }
-            
-            
+        this.modalInfo = {
+            dates: `${moment(e.start).format('MM/DD HH:mm')} 
+                - ${moment(e.end).format('MM/DD HH:mm')}`,
+            doctors: (e.desc.slice().indexOf('NA') !== -1) ? null : e.desc.slice(),
+        };
+
         this.setState({
             showModal: true,
-        
         });
         // const top = this.coords.mouseY - 32;
         // // const bottom = top + 100;
@@ -231,96 +237,109 @@ class Test extends React.Component {
         //         // bottom,
         //     },
         // };
-        
-
     }
-        
+
     getCoords = (event) => {
         const e = event.nativeEvent;
-        // this.coords.mouseX = e.clientX;
-        // this.coords.mouseY = e.clientY;
-        // this.setState({
-        //     x: e.screenX,
-        // });
-        // // console.log(event, e);
-        // this.coords.windowX = window.innerWidth;
-        // this.coords.windowY = window.innerHeight;
-        // // console.log(this.coords);
-        // console.log(e.path);
-        const rect = e.path[0].getBoundingClientRect();
+
+        let rect;
+        // Перебираем массив родительских эелементов чтобы найти div если
+        // пользователь тыкнул на p или em
+        e.path.some((el) => {
+            if (el.nodeName === 'DIV') {
+                rect = el.getBoundingClientRect();
+                return true;
+            }
+        });
         const someSpace = 50;
+        // пихаем координаты в стиль модального окна
         this.modalStyle.content = {
             top: rect.top - someSpace + 'px',
             bottom: window.innerHeight - rect.bottom - someSpace + 'px',
             left: rect.left - someSpace + 'px',
-            right: window.innerWidth - rect.right - 2*someSpace + 'px',
+            right: window.innerWidth - rect.right - 2 * someSpace + 'px',
         };
-        // console.log(this.modalStyle);
-
-        
-        // console.log(rect);
     }
 
-    test = (e) => {
-        console.log(e.nativeEvent);
+    test = (event) => {
+        const e = event.nativeEvent;
+        console.log(e);
+        const div = [];
+        e.path.some((el) => {
+            if (el.nodeName === 'DIV') {
+                console.log('found div');
+                div.push(el);
+                return true;
+            }
+        });
+        console.log(e.path[0].nodeName);
+        console.log(div);
+    }
+
+    modalContent = () => {
+        return (
+            <div>
+                <button onClick={this.handleCloseModal} className="closeModal">X</button>
+                {this.modalInfo.doctors ? <div>
+                    <p> Выберете врача </p>
+                    <form action="" className="">
+                        <select name="doctors">
+                            {this.modalInfo.doctors ? console.log(this.modalInfo.doctors) : ''}
+                            {this.modalInfo.doctors ? this.modalInfo.doctors.map(doc => {
+                                console.log(doc);
+                                return <option value={doc} key={doc}>{doc} </option>;
+
+                            })
+                                : ''}
+
+                        </select>
+                        {/*<input type="submit" className=""> Выбрать врача </input>*/}
+                    </form> </div> : <p> Запись на это время не возможна </p>}
+
+
+                <p>Modal {this.modalInfo.dates} text!</p>
+                <p> {this.modalInfo.doctors} adsfasd </p>
+            </div>
+        );
     }
 
     render() {
         return (
-            <div>
-                <div className='main' onMouseMove={this.getCoords} onClick={this.test}>
-                    <Modal
-                        isOpen={this.state.showModal}
-                        contentLabel="onRequestClose Example"
-                        onRequestClose={this.handleCloseModal}
-                        className="Modal"
-                        overlayClassName="Overlay"
-                        style={this.modalStyle}
-                    >
-                        <button onClick={this.handleCloseModal} className="closeModal">X</button>
-                        <p> Выберете врача </p>
-                        <form action="" className="">
-                            <select name="doctors">
-                            {this.modalInfo.doctors ? console.log(this.modalInfo.doctors) : ''}
-                                {this.modalInfo.doctors ? this.modalInfo.doctors.map(doc => {
-                                    console.log(doc);
-                                    return <option value={doc} key={doc}>{doc} </option>;
 
-                                    })
-                                : ''}
-                                
-                            </select>
-                            {/*<input type="submit" className=""> Выбрать врача </input>*/}
-                        </form>
-                        
+            <div className='main' onMouseMove={this.getCoords} onClick={this.test}>
+                <Modal
+                    isOpen={this.state.showModal}
+                    contentLabel="onRequestClose Example"
+                    onRequestClose={this.handleCloseModal}
+                    className="Modal"
+                    overlayClassName="Overlay"
+                    style={this.modalStyle}
+                >
+                    {this.modalContent()}
 
-                        <p>Modal {this.modalInfo.dates} text!</p>
-                        <p> {this.modalInfo.doctors} adsfasd </p>
+                </Modal>
+                <BigCalendar
+                    onSelectEvent={this.onSelect}
+                    events={this.props.events.dates.slice()}
+                    views={['week']}
+                    min={moment('10:00', 'HH:mm').toDate()}
+                    max={moment('19:00', 'HH:mm').toDate()}
+                    defaultDate={new Date()}
+                    defaultView='week'
+                    messages={messages}
+                    formats={formats}
+                    onNavigate={this.eventNavigate}
+                    eventPropGetter={this.eventStyleGetter}
 
-                    </Modal>
-                    <BigCalendar
-                        onSelectEvent={this.onSelect}
-                        events={this.props.events.dates.slice()}
-                        views={['week']}
-                        min={moment('10:00', 'HH:mm').toDate()}
-                        max={moment('19:00', 'HH:mm').toDate()}
-                        defaultDate={new Date()}
-                        defaultView='week'
-                        messages={messages}
-                        formats={formats}
-                        onNavigate={this.eventNavigate}
-                        eventPropGetter={this.eventStyleGetter}
-                        
-                        components={{
-                            event: this.Event,
-                            toolbar: this.CustomToolbar,
-                            week: {
-                                time: this.EventHeader,
-                                event: this.EventWeek,
-                            },
-                        }}
-                    />
-                </div>
+                    components={{
+                        event: this.Event,
+                        toolbar: this.CustomToolbar,
+                        week: {
+                            time: this.EventHeader,
+                            event: this.EventWeek,
+                        },
+                    }}
+                />
             </div>
         );
     }

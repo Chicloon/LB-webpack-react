@@ -8,52 +8,76 @@ class Events {
     // path = '/Contacts';
 
     doctors = [
-    {
-        spec: 'sergeon',
-        name: 'Jon',
-        working: {
-            days: {
-                start: '15/04/10',
-                end: moment(new Date()).format('YY/MM/DD'),
+        {
+            spec: 'sergeon',
+            name: 'Jon',
+            working: {
+                days: {
+                    start: '15/04/10',
+                    end: moment(new Date()).format('YY/MM/DD'),
+                },
+                hours: {
+                    start: '10:00',
+                    end: '15:00',
+                },
             },
-            hours: {
-                start: '10:00',
-                end: '19:00',
-            },
-        },
-        busy: [
-            {
-                start: '',
-                end: '',
-            },
-        ],
+            busy: [
+                {
+                    start: '',
+                    end: '',
+                },
+            ],
 
-    },
-    {
-        spec: 'terapeft',
-        name: 'Bob',
-        working: {
-            days: {
-                start: '15/04/12',
-                end: moment(new Date()).format('YY/MM/DD'),
-            },
-            hours: {
-                start: '10:00',
-                end: '16:00',
-            },
         },
-        busy: [
-            {
-                start: `${moment(new Date()).format('YY/MM/DD')} 10:00`,
-                end: `${moment(new Date()).format('YY/MM/DD')} 11:00`,
+        {
+            spec: 'terapeft',
+            name: 'Bob',
+            working: {
+                days: {
+                    start: '15/04/12',
+                    end: moment(new Date()).add(1, 'd').format('YY/MM/DD'),
+                },
+                hours: {
+                    start: '10:00',
+                    end: '16:00',
+                },
             },
-            {
-                start: `${moment(new Date()).format('YY/MM/DD')} 12:00`,
-                end: `${moment(new Date()).format('YY/MM/DD')} 13:00`,
+            busy: [
+                {
+                    start: `${moment(new Date()).format('YY/MM/DD')} 10:00`,
+                    end: `${moment(new Date()).format('YY/MM/DD')} 11:00`,
+                },
+                {
+                    start: `${moment(new Date()).format('YY/MM/DD')} 12:00`,
+                    end: `${moment(new Date()).format('YY/MM/DD')} 13:00`,
+                },
+            ],
+        },
+         {
+            spec: 'dantist',
+            name: 'Mike',
+            working: {
+                days: {
+                    start: moment(new Date()).format('YY/MM/DD'),
+                    end: moment(new Date()).add(2, 'd').format('YY/MM/DD'),
+                },
+                hours: {
+                    start: '10:00',
+                    end: '13:00',
+                },
             },
-        ],
-    },
-];
+            busy: [
+                {
+                    start: `${moment(new Date()).format('YY/MM/DD')} 10:00`,
+                    end: `${moment(new Date()).format('YY/MM/DD')} 11:00`,
+                },
+                {
+                    start: `${moment(new Date()).format('YY/MM/DD')} 12:00`,
+                    end: `${moment(new Date()).format('YY/MM/DD')} 13:00`,
+                },
+            ],
+        },
+    ];
 
 
     @observable dates = [];
@@ -130,12 +154,14 @@ class Events {
 
             if (startTime >= min && endTime < max) {
                 const addNew = {
-                    title: [],
+                    title: 'Записаться',
                     start: newDate.start,
                     end: newDate.end,
                     desc: 'Blank',
+                    status: 'NA',
                 };
                 // console.log(addNew);
+                let desc = [];
                 for (let x = 0; x < selectedDocs.length; x++) {
                     // console.log(selectedDocs[x].working.days, startTime, endTime);
                     // console.log(selectedDocs[x].working.days, currentDate);
@@ -144,11 +170,24 @@ class Events {
                         && selectedDocs[x].working.days.start <= currentDate
                         && selectedDocs[x].working.days.end >= currentDate
                     ) {
-                        // console.log('match');
-                        addNew.title.push(`Dr. ${selectedDocs[x].name}`);
+                        addNew.status = 'partially';
+                        if (desc[0] === 'NA') {
+                            desc = [(selectedDocs[x].name)];
+                        } else {
+                            desc.push(selectedDocs[x].name);
+                            addNew.status = (desc.length === selectedDocs.length) ?
+                            'all free' : 'partially';
+                            // if (desc.length === selectedDocs.length) {
+                            //       addNew.status = 'all free';
+                        
+                            // }
+                        }
                     } else {
-                        addNew.title = 'free';
+                        desc = (desc.length === 0) ? ['NA'] : desc;
                     }
+                    addNew.desc = desc;
+                    addNew.status = (desc[0] === 'NA') ? 'NA' : addNew.status;
+                    addNew.title = (desc[0] === 'NA') ? 'NA' : 'Записаться';
                 }
                 this.dates.push(addNew);
                 // console.log(dates[i]);
@@ -157,7 +196,7 @@ class Events {
                     console.log(`I'm doAAAne`);
                     // console.log(dates);
                     over = true;
-                    console.log(this.dates);
+                    // console.log(this.dates);
                 }
                 i++;
             }
@@ -175,34 +214,10 @@ class Events {
         while (!over);
     };
 
-    @action addNew = (e) => {        
+    @action addNew = (e) => {
         e.title = 'NA';
     }
 
 }
 
 export default new Events();
-
-
-
-// /**
-//  * функция возвращает массив докторов отфильтрованные по специальности
-//  * 
-//  * @param {Array} doctors - массив докоторов
-//  * @param {string} spec - специлальность доктора по которой надо отфильтровать
-//  */
-
-// const filterDoctors = (doctors, spec) => {
-//     const selectedDocs = [];
-//     const docs = doctors.filter(el => el.spec === spec);
-//     console.log('docs from filter', docs);
-//     docs.forEach(el => {
-//         if (el.working.days.start <= moment(startDate, 'YY/MM/DD HH:mm').format('YY/MM/DD') ||
-//             el.working.days.end >= moment(endDate, 'YY/MM/DD HH:mm').format('YY/MM/DD')) {
-//             selectedDocs.push(el);
-//         }
-//     });
-//     return selectedDocs;
-// };
-
-

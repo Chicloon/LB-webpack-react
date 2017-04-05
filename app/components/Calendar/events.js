@@ -165,7 +165,7 @@ const format = (min, max, startDate, endDate, doctors, spec) => {
                 console.log(`I'm doAAAne`);
                 // console.log(dates);
                 over = true;
-                console.log(dates);
+                // console.log(dates);
             }
             i++;
         }
