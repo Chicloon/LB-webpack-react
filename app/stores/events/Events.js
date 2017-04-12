@@ -80,12 +80,12 @@ class Events {
                     end: `${moment(new Date()).format('YY/MM/DD')} 12:00`,
                 },
                 {
-                    start: `${moment(new Date()).add(2, 'd').format('YY/MM/DD')} 11:00`,
-                    end: `${moment(new Date()).add(2, 'd').format('YY/MM/DD')} 12:00`,
-                },
-                {
                     start: `${moment(new Date()).add(1, 'd').format('YY/MM/DD')} 11:00`,
                     end: `${moment(new Date()).add(1, 'd').format('YY/MM/DD')} 12:00`,
+                },
+                {
+                    start: `${moment(new Date()).add(2, 'd').format('YY/MM/DD')} 12:00`,
+                    end: `${moment(new Date()).add(2, 'd').format('YY/MM/DD')} 13:00`,
                 },
             ],
         },
@@ -180,63 +180,20 @@ class Events {
                         && selectedDocs[x].working.days.start <= currentDate
                         && selectedDocs[x].working.days.end >= currentDate
                     ) {
-                        console.log('current doc', selectedDocs[x]);
-                        let busy = false;
-                        selectedDocs[x].busy.forEach((el, index) => {
-                            console.log('busy element', el);
-                            console.log(index);
-                            if (el.start === currentDate + ' ' + currentTime) {
-                                console.log('doc is busy');
-                                busy = true;
-                                // addNew.status = 'NA';
+                        // меняем статус на доступный
+                        addNew.status = 'partially';
 
-                                // addNew.status = 'NA';
-                                // addNew.status = 'partially';
-                                // addNew.speciality = selectedDocs[x].spec;
-                                // if (desc.name[0] === 'NA') {
-                                //     desc.name = [(selectedDocs[x].name)];
-                                //     desc.speciality = [(selectedDocs[x].spec)];
-                                // } else {
-                                //     desc.name.push(selectedDocs[x].name);
-                                //     desc.speciality.push(selectedDocs[x].spec);
-                                //     addNew.status = (desc.length === selectedDocs.length) ?
-                                //         'all free' : 'partially';
-                                // }
-                            } else {
+                        // отфильтровываем докторов которые заняты в это время
+                        const busy = selectedDocs[x].busy.filter(el => el.start === currentDate + ' ' + currentTime);
 
-                                // desc.name.push(selectedDocs[x].name);
-                                addNew.status = 'partially';
-
-                                // console.log('doc', selectedDocs[x]);
-                                // console.log(currentDate, currentTime);
-                                // desc.name = (desc.length === 0) ? ['NA'] : desc.name;
-                                desc.name.push(selectedDocs[x].name);
-                            }
-                            if (!busy && index === selectedDocs[x].busy.length) {
-                                console.info('добавляю врача');
-                            }
-                        });
-
-                        // addNew.status = 'partially';
-                        // addNew.speciality = selectedDocs[x].spec;
-                        // // if (desc.name[0] === 'NA') {
-                        // //     desc.name = [(selectedDocs[x].name)];
-                        // //     desc.speciality = [(selectedDocs[x].spec)];
-                        // // } else {
-                        // //     desc.name.push(selectedDocs[x].name);
-                        // //     desc.speciality.push(selectedDocs[x].spec);
-                        // //     addNew.status = (desc.name.length === selectedDocs.length) ?
-                        // //         'all free' : addNew.status;
-                        // // }
-                        // if (!busy) {
-                        //     desc.name.push(selectedDocs[x].name);
-                        // }
+                        if (busy.length === 0) {
+                            desc.name.push(selectedDocs[x].name);
+                        }
 
                         desc.speciality.push(selectedDocs[x].spec);
                         addNew.status = (desc.name.length === selectedDocs.length) ?
                             'all free' : addNew.status;
                         addNew.status = (!desc.name[0]) ? 'NA' : addNew.status;
-                        // console.log('addNew now', addNew);
                     } else {
                         desc.status = (desc.name.length === 0) ? ['NA'] : desc.status;
                     }

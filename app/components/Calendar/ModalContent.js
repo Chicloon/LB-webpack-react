@@ -1,12 +1,14 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import moment from 'moment';
 
-const min = moment('10:00', 'HH:mm').format('HH:mm');
-const max = moment('18:00', 'HH:mm').format('HH:mm');
-const today = moment(new Date()).format('YY/MM/DD');
-const startDate = moment(`${today} 10:00`, 'YY/MM/DD HH:mm').toDate();
-const endDate = moment(startDate).add(1, 'months').toDate();
+import config from './calendarConfig';
+
+
+// const min = moment('10:00', 'HH:mm').format('HH:mm');
+// const max = moment('18:00', 'HH:mm').format('HH:mm');
+// const today = moment(new Date()).format('YY/MM/DD');
+// const startDate = moment(`${today} 10:00`, 'YY/MM/DD HH:mm').toDate();
+// const endDate = moment(startDate).add(1, 'months').toDate();
 
 
 @observer(['events'])
@@ -21,7 +23,7 @@ class ModalContent extends React.Component {
         e.preventDefault();
         console.log(this.refs.doctor.value);
         this.props.events.addNew(this.refs.doctor.value, this.props.info.dates);
-         this.props.events.fetchAll(min, max, startDate, endDate, '');
+        this.props.events.fetchAll(config.min, config.max, config.startDate, config.endDate, '');
 
         this.props.close();
     }

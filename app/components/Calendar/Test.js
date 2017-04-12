@@ -5,9 +5,11 @@ import Modal from 'react-modal';
 import { observer } from 'mobx-react';
 
 import ModalContent from './ModalContent';
+import config from './calendarConfig';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './Calendar.less';
+
 
 // import events from './events';
 
@@ -25,11 +27,11 @@ BigCalendar.momentLocalizer(moment); // or globalizeLocalizer
 
 // const specaility = '';
 
-const min = moment('10:00', 'HH:mm').format('HH:mm');
-const max = moment('18:00', 'HH:mm').format('HH:mm');
-const today = moment(new Date()).format('YY/MM/DD');
-const startDate = moment(`${today} 10:00`, 'YY/MM/DD HH:mm').toDate();
-const endDate = moment(startDate).add(1, 'months').toDate();
+// const min = moment('10:00', 'HH:mm').format('HH:mm');
+// const max = moment('18:00', 'HH:mm').format('HH:mm');
+// const today = moment(new Date()).format('YY/MM/DD');
+// const startDate = moment(`${today} 10:00`, 'YY/MM/DD HH:mm').toDate();
+// const endDate = moment(startDate).add(1, 'months').toDate();
 
 
 
@@ -59,7 +61,7 @@ const formats = {
 class Test extends React.Component {
 
     componentWillMount() {
-        this.props.events.fetchAll(min, max, startDate, endDate, '');
+        this.props.events.fetchAll(config.min, config.max, config.startDate, config.endDate, '');
         this.setState({ showModal: false });
     }
 
@@ -217,8 +219,8 @@ class Test extends React.Component {
         if (e.title !== 'NA') {
             this.modalInfo = {
                 dates: {
-                    start: moment(e.start).format('MM/DD HH:mm'),
-                    end: moment(e.end).format('MM/DD HH:mm'),
+                    start: moment(e.start).format('YY/MM/DD HH:mm'),
+                    end: moment(e.end).format('YY/MM/DD HH:mm'),
                 },
                 doctors: (e.desc.name.slice().indexOf('NA') !== -1) ? null : e.desc.name.slice(),
                 specaility: (e.desc.name.slice().indexOf('NA') !== -1) ? null : e.desc.speciality.slice(),
