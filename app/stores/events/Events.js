@@ -7,6 +7,14 @@ import moment from 'moment';
 class Events {
     // path = '/Contacts';
 
+
+    // min = moment('10:00', 'HH:mm').format('HH:mm');
+    // max = moment('18:00', 'HH:mm').format('HH:mm');
+    // today = moment(new Date()).format('YY/MM/DD');
+    // startDate = moment(`${today} 10:00`, 'YY/MM/DD HH:mm').toDate();
+    // endDate = moment(startDate).add(1, 'months').toDate();
+
+
     doctors = [
         {
             spec: 'sergeon',
@@ -23,8 +31,8 @@ class Events {
             },
             busy: [
                 {
-                    start: '',
-                    end: '',
+                    start: `${moment(new Date()).format('YY/MM/DD')} 16:00`,
+                    end: `${moment(new Date()).format('YY/MM/DD')} 17:00`,
                 },
             ],
 
@@ -35,7 +43,7 @@ class Events {
             working: {
                 days: {
                     start: '15/04/12',
-                    end: moment(new Date()).add(1, 'd').format('YY/MM/DD'),
+                    end: moment(new Date()).add(4, 'd').format('YY/MM/DD'),
                 },
                 hours: {
                     start: '10:00',
@@ -48,18 +56,18 @@ class Events {
                     end: `${moment(new Date()).format('YY/MM/DD')} 11:00`,
                 },
                 {
-                    start: `${moment(new Date()).format('YY/MM/DD')} 12:00`,
-                    end: `${moment(new Date()).format('YY/MM/DD')} 13:00`,
+                    start: `${moment(new Date()).format('YY/MM/DD')} 11:00`,
+                    end: `${moment(new Date()).format('YY/MM/DD')} 12:00`,
                 },
             ],
         },
-         {
+        {
             spec: 'dantist',
             name: 'Mike',
             working: {
                 days: {
                     start: moment(new Date()).format('YY/MM/DD'),
-                    end: moment(new Date()).add(2, 'd').format('YY/MM/DD'),
+                    end: moment(new Date()).add(4, 'd').format('YY/MM/DD'),
                 },
                 hours: {
                     start: '10:00',
@@ -68,12 +76,16 @@ class Events {
             },
             busy: [
                 {
-                    start: `${moment(new Date()).format('YY/MM/DD')} 10:00`,
-                    end: `${moment(new Date()).format('YY/MM/DD')} 11:00`,
+                    start: `${moment(new Date()).format('YY/MM/DD')} 11:00`,
+                    end: `${moment(new Date()).format('YY/MM/DD')} 12:00`,
                 },
                 {
-                    start: `${moment(new Date()).format('YY/MM/DD')} 12:00`,
-                    end: `${moment(new Date()).format('YY/MM/DD')} 13:00`,
+                    start: `${moment(new Date()).add(2, 'd').format('YY/MM/DD')} 11:00`,
+                    end: `${moment(new Date()).add(2, 'd').format('YY/MM/DD')} 12:00`,
+                },
+                {
+                    start: `${moment(new Date()).add(1, 'd').format('YY/MM/DD')} 11:00`,
+                    end: `${moment(new Date()).add(1, 'd').format('YY/MM/DD')} 12:00`,
                 },
             ],
         },
@@ -119,7 +131,7 @@ class Events {
 
 
     @action fetchAll = (min, max, startDate, endDate, spec) => {
-
+        this.dates = [];
         if (min > max) {
             throw new Error('Минимальное значение времени начала должно быть меньше времени окончания');
         }
@@ -136,7 +148,7 @@ class Events {
         if (spec !== '') {
             selectedDocs = this.filterDoctors(this.doctors, spec);
         }
-        console.log(selectedDocs);
+        console.log('selectedDocs', selectedDocs);
 
         const newDate = {
             title: 'Blank',
@@ -146,55 +158,97 @@ class Events {
 
         let over = false;
         let i = 0;
-        let startTime, endTime, currentDate;
         do {
-            startTime = moment(newDate.start).format('HH:mm');
-            endTime = moment(newDate.start).format('HH:mm');
-            currentDate = moment(newDate.start).format('YY/MM/DD');
+            const currentTime = moment(newDate.start).format('HH:mm');
+            const currentDate = moment(newDate.start).format('YY/MM/DD');
 
-            if (startTime >= min && endTime < max) {
+            if (currentTime >= min && currentTime < max) {
                 const addNew = {
                     title: 'Записаться',
                     start: newDate.start,
                     end: newDate.end,
-                    desc: 'Blank',
+                    desc: [],
                     status: 'NA',
                 };
-                // console.log(addNew);
-                let desc = [];
+                const desc = {
+                    name: [],
+                    speciality: [],
+                };
                 for (let x = 0; x < selectedDocs.length; x++) {
-                    // console.log(selectedDocs[x].working.days, startTime, endTime);
-                    // console.log(selectedDocs[x].working.days, currentDate);
-                    if (selectedDocs[x].working.hours.start <= startTime
-                        && selectedDocs[x].working.hours.end > endTime
+                    if (selectedDocs[x].working.hours.start <= currentTime
+                        && selectedDocs[x].working.hours.end > currentTime
                         && selectedDocs[x].working.days.start <= currentDate
                         && selectedDocs[x].working.days.end >= currentDate
                     ) {
-                        addNew.status = 'partially';
-                        if (desc[0] === 'NA') {
-                            desc = [(selectedDocs[x].name)];
-                        } else {
-                            desc.push(selectedDocs[x].name);
-                            addNew.status = (desc.length === selectedDocs.length) ?
-                            'all free' : 'partially';
-                            // if (desc.length === selectedDocs.length) {
-                            //       addNew.status = 'all free';
-                        
-                            // }
-                        }
+                        console.log('current doc', selectedDocs[x]);
+                        let busy = false;
+                        selectedDocs[x].busy.forEach((el, index) => {
+                            console.log('busy element', el);
+                            console.log(index);
+                            if (el.start === currentDate + ' ' + currentTime) {
+                                console.log('doc is busy');
+                                busy = true;
+                                // addNew.status = 'NA';
+
+                                // addNew.status = 'NA';
+                                // addNew.status = 'partially';
+                                // addNew.speciality = selectedDocs[x].spec;
+                                // if (desc.name[0] === 'NA') {
+                                //     desc.name = [(selectedDocs[x].name)];
+                                //     desc.speciality = [(selectedDocs[x].spec)];
+                                // } else {
+                                //     desc.name.push(selectedDocs[x].name);
+                                //     desc.speciality.push(selectedDocs[x].spec);
+                                //     addNew.status = (desc.length === selectedDocs.length) ?
+                                //         'all free' : 'partially';
+                                // }
+                            } else {
+
+                                // desc.name.push(selectedDocs[x].name);
+                                addNew.status = 'partially';
+
+                                // console.log('doc', selectedDocs[x]);
+                                // console.log(currentDate, currentTime);
+                                // desc.name = (desc.length === 0) ? ['NA'] : desc.name;
+                                desc.name.push(selectedDocs[x].name);
+                            }
+                            if (!busy && index === selectedDocs[x].busy.length) {
+                                console.info('добавляю врача');
+                            }
+                        });
+
+                        // addNew.status = 'partially';
+                        // addNew.speciality = selectedDocs[x].spec;
+                        // // if (desc.name[0] === 'NA') {
+                        // //     desc.name = [(selectedDocs[x].name)];
+                        // //     desc.speciality = [(selectedDocs[x].spec)];
+                        // // } else {
+                        // //     desc.name.push(selectedDocs[x].name);
+                        // //     desc.speciality.push(selectedDocs[x].spec);
+                        // //     addNew.status = (desc.name.length === selectedDocs.length) ?
+                        // //         'all free' : addNew.status;
+                        // // }
+                        // if (!busy) {
+                        //     desc.name.push(selectedDocs[x].name);
+                        // }
+
+                        desc.speciality.push(selectedDocs[x].spec);
+                        addNew.status = (desc.name.length === selectedDocs.length) ?
+                            'all free' : addNew.status;
+                        addNew.status = (!desc.name[0]) ? 'NA' : addNew.status;
+                        // console.log('addNew now', addNew);
                     } else {
-                        desc = (desc.length === 0) ? ['NA'] : desc;
+                        desc.status = (desc.name.length === 0) ? ['NA'] : desc.status;
                     }
+                    // addNew.desc = desc.name;
+                    // addNew.speciality = desc.speciality;
                     addNew.desc = desc;
-                    addNew.status = (desc[0] === 'NA') ? 'NA' : addNew.status;
-                    addNew.title = (desc[0] === 'NA') ? 'NA' : 'Записаться';
+                    addNew.title = (desc.name[0]) ? 'Записаться' : 'NA';
                 }
                 this.dates.push(addNew);
-                // console.log(dates[i]);
-                // console.log(moment(dates[i].start).format('LLL'), ed.format('LLL'));
                 if (moment(this.dates[i].start).format('LLL') === moment(endDate).format('LLL')) {
                     console.log(`I'm doAAAne`);
-                    // console.log(dates);
+                    // console.log(this.dates.slice());
                     over = true;
                     // console.log(this.dates);
                 }
@@ -214,10 +268,13 @@ class Events {
         while (!over);
     };
 
-    @action addNew = (e) => {
-        e.title = 'NA';
+    @action addNew = (docName, dates) => {
+        this.doctors.forEach(el => {
+            if (el.name === docName) {
+                el.busy.push(dates);
+            }
+        });
     }
-
 }
 
 export default new Events();

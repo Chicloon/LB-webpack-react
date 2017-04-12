@@ -4,7 +4,7 @@ import React from 'react';
 import Modal from 'react-modal';
 import { observer } from 'mobx-react';
 
-
+import ModalContent from './ModalContent';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './Calendar.less';
@@ -69,7 +69,7 @@ class Test extends React.Component {
                 <strong>
                     {event.title}
                 </strong>
-                {event.desc && (':  ' + event.desc)}
+                {event.desc.name.slice() && (':  ' + event.desc.name.slice())}
             </span>
         );
     }
@@ -78,7 +78,7 @@ class Test extends React.Component {
         // console.log(event);
         return <span>
             <em style={{ color: 'magenta' }}>{event.title}</em>
-            <p>{event.desc}</p>
+            <p>{event.desc.name.slice()}</p>
         </span>
     }
 
@@ -207,36 +207,29 @@ class Test extends React.Component {
     }
 
 
-    modalInfo = {};
+    modalInfo = {
+        dates: '',
+        doctors: [],
+        speciality: [],
+    };
 
     onSelect = (e) => {
-        console.log(e);
-        console.log(e.desc.slice());
+        if (e.title !== 'NA') {
+            this.modalInfo = {
+                dates: {
+                    start: moment(e.start).format('MM/DD HH:mm'),
+                    end: moment(e.end).format('MM/DD HH:mm'),
+                },
+                doctors: (e.desc.name.slice().indexOf('NA') !== -1) ? null : e.desc.name.slice(),
+                specaility: (e.desc.name.slice().indexOf('NA') !== -1) ? null : e.desc.speciality.slice(),
+            };
 
-        if (e.desc.slice().indexOf('NA') !== -1) {
+            this.setState({
+                showModal: true,
+            });
+        } else {
             console.log('нашел NA');
         }
-        this.modalInfo = {
-            dates: `${moment(e.start).format('MM/DD HH:mm')} 
-                - ${moment(e.end).format('MM/DD HH:mm')}`,
-            doctors: (e.desc.slice().indexOf('NA') !== -1) ? null : e.desc.slice(),
-        };
-
-        this.setState({
-            showModal: true,
-        });
-        // const top = this.coords.mouseY - 32;
-        // // const bottom = top + 100;
-        // console.log(this.coords);
-        // console.log('x', this.state.x);
-        // this.modalStyle.content = this.coords;
-        console.log(this.modalStyle.content);
-        // this.modalStyle = {
-        //     content: {
-        //         top,
-        //         // bottom,
-        //     },
-        // };
     }
 
     getCoords = (event) => {
@@ -251,62 +244,20 @@ class Test extends React.Component {
                 return true;
             }
         });
-        const someSpace = 50;
+        const someSpace = 80;
         // пихаем координаты в стиль модального окна
         this.modalStyle.content = {
-            top: rect.top - someSpace + 'px',
+            top: rect.top - someSpace / 2 + 'px',
             bottom: window.innerHeight - rect.bottom - someSpace + 'px',
             left: rect.left - someSpace + 'px',
             right: window.innerWidth - rect.right - 2 * someSpace + 'px',
         };
     }
 
-    test = (event) => {
-        const e = event.nativeEvent;
-        console.log(e);
-        const div = [];
-        e.path.some((el) => {
-            if (el.nodeName === 'DIV') {
-                console.log('found div');
-                div.push(el);
-                return true;
-            }
-        });
-        console.log(e.path[0].nodeName);
-        console.log(div);
-    }
-
-    modalContent = () => {
-        return (
-            <div>
-                <button onClick={this.handleCloseModal} className="closeModal">X</button>
-                {this.modalInfo.doctors ? <div>
-                    <p> Выберете врача </p>
-                    <form action="" className="">
-                        <select name="doctors">
-                            {this.modalInfo.doctors ? console.log(this.modalInfo.doctors) : ''}
-                            {this.modalInfo.doctors ? this.modalInfo.doctors.map(doc => {
-                                console.log(doc);
-                                return <option value={doc} key={doc}>{doc} </option>;
-
-                            })
-                                : ''}
-
-                        </select>
-                        {/*<input type="submit" className=""> Выбрать врача </input>*/}
-                    </form> </div> : <p> Запись на это время не возможна </p>}
-
-
-                <p>Modal {this.modalInfo.dates} text!</p>
-                <p> {this.modalInfo.doctors} adsfasd </p>
-            </div>
-        );
-    }
-
     render() {
         return (
 
-            <div className='main' onMouseMove={this.getCoords} onClick={this.test}>
+            <div className='main' onMouseMove={this.getCoords}>
                 <Modal
                     isOpen={this.state.showModal}
                     contentLabel="onRequestClose Example"
@@ -315,7 +266,8 @@ class Test extends React.Component {
                     overlayClassName="Overlay"
                     style={this.modalStyle}
                 >
-                    {this.modalContent()}
+                    {/*{this.modalContent()}*/}
+                    <ModalContent key='modal' info={this.modalInfo} close={this.handleCloseModal} />
 
                 </Modal>
                 <BigCalendar
