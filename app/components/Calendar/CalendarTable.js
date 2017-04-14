@@ -5,60 +5,18 @@ import Modal from 'react-modal';
 import { observer } from 'mobx-react';
 
 import ModalContent from './ModalContent';
+
 import config from './calendarConfig';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './Calendar.less';
 
-
-// import events from './events';
-
-// Setup the localizer by providing the moment (or globalize) Object
-// to the correct localizer.
 moment.locale('ru');
 BigCalendar.momentLocalizer(moment); // or globalizeLocalizer
 
 
-
-
-
-
-// const dates = [];
-
-// const specaility = '';
-
-// const min = moment('10:00', 'HH:mm').format('HH:mm');
-// const max = moment('18:00', 'HH:mm').format('HH:mm');
-// const today = moment(new Date()).format('YY/MM/DD');
-// const startDate = moment(`${today} 10:00`, 'YY/MM/DD HH:mm').toDate();
-// const endDate = moment(startDate).add(1, 'months').toDate();
-
-
-
-
-
-const messages = {
-    next: "Вперед",
-    previous: "Назад",
-    today: "Сегодня",
-    month: 'Месяц',
-    week: 'Неделя',
-    day: 'День',
-};
-
-const formats = {
-    dateFormat: 'dd',
-    dayFormat: (date, culture, localizer) =>
-        localizer.format(date, 'dd DD MMM ', culture),
-    timeGutterFormat: 'HH:mm',
-    //   dayFormat: (date, culture, localizer) =>
-    //     localizer.format(date, 'DDD', culture),
-
-    eventTimeRangeFormat: ({ start, end }, culture, local) => null //убираем отображение времени
-};
-
 @observer(['events'])
-class Test extends React.Component {
+class CalendarTable extends React.Component {
 
     componentWillMount() {
         this.props.events.fetchAll(config.min, config.max, config.startDate, config.endDate, '');
@@ -246,7 +204,7 @@ class Test extends React.Component {
                 return true;
             }
         });
-        const someSpace = 80;
+        const someSpace = 90;
         // пихаем координаты в стиль модального окна
         this.modalStyle.content = {
             top: rect.top - someSpace / 2 + 'px',
@@ -259,7 +217,8 @@ class Test extends React.Component {
     render() {
         return (
 
-            <div className='main' onMouseMove={this.getCoords}>
+            <div className='calendar-table' onMouseMove={this.getCoords}>
+
                 <Modal
                     isOpen={this.state.showModal}
                     contentLabel="onRequestClose Example"
@@ -279,9 +238,8 @@ class Test extends React.Component {
                     min={moment('10:00', 'HH:mm').toDate()}
                     max={moment('19:00', 'HH:mm').toDate()}
                     defaultDate={new Date()}
-                    defaultView='week'
-                    messages={messages}
-                    formats={formats}
+                    defaultView='week'                    
+                    formats={config.formats}
                     onNavigate={this.eventNavigate}
                     eventPropGetter={this.eventStyleGetter}
 
@@ -299,4 +257,4 @@ class Test extends React.Component {
     }
 }
 
-export default Test;
+export default CalendarTable;

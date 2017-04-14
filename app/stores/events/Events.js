@@ -1,19 +1,10 @@
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import moment from 'moment';
 // import Api from 'helpers/api';
-
+import config from '../../components/Calendar/calendarConfig';
 
 
 class Events {
-    // path = '/Contacts';
-
-
-    // min = moment('10:00', 'HH:mm').format('HH:mm');
-    // max = moment('18:00', 'HH:mm').format('HH:mm');
-    // today = moment(new Date()).format('YY/MM/DD');
-    // startDate = moment(`${today} 10:00`, 'YY/MM/DD HH:mm').toDate();
-    // endDate = moment(startDate).add(1, 'months').toDate();
-
 
     doctors = [
         {
@@ -89,34 +80,84 @@ class Events {
                 },
             ],
         },
+        {
+            spec: 'dantist',
+            name: 'Ken dantist',
+            working: {
+                days: {
+                    start: moment(new Date()).format('YY/MM/DD'),
+                    end: moment(new Date()).add(4, 'd').format('YY/MM/DD'),
+                },
+                hours: {
+                    start: '10:00',
+                    end: '13:00',
+                },
+            },
+            busy: [
+                {
+                    start: `${moment(new Date()).add(1, 'd').format('YY/MM/DD')} 11:00`,
+                    end: `${moment(new Date()).add(1, 'd').format('YY/MM/DD')} 12:00`,
+                },
+                {
+                    start: `${moment(new Date()).add(2, 'd').format('YY/MM/DD')} 12:00`,
+                    end: `${moment(new Date()).add(2, 'd').format('YY/MM/DD')} 13:00`,
+                },
+                {
+                    start: `${moment(new Date()).add(3, 'd').format('YY/MM/DD')} 12:00`,
+                    end: `${moment(new Date()).add(3, 'd').format('YY/MM/DD')} 13:00`,
+                },
+            ],
+        },
     ];
 
 
     @observable dates = [];
-    @observable freeDoctors = [];
+    @observable filters = {
+        name: '',
+        spec: '',
+    };
     @observable isLoading = false;
-
+    @observable selectedDocs = this.doctors;
     /**
      * функция возвращает массив докторов отфильтрованные по специальности
      * 
      * @param {Array} doctors - массив докоторов
      * @param {string} spec - специлальность доктора по которой надо отфильтровать
      */
-    filterDoctors = (doctors, spec) => {
-        const selectedDocs = [];
-        const docs = doctors.filter(el => el.spec === spec);
-        console.log('docs from filter', docs);
-        docs.forEach(el => {
-            if (el.working.days.start <= moment(startDate, 'YY/MM/DD HH:mm').format('YY/MM/DD') ||
-                el.working.days.end >= moment(endDate, 'YY/MM/DD HH:mm').format('YY/MM/DD')) {
-                selectedDocs.push(el);
-            }
-        });
-        this.freeDoctors.push(selectedDocs);
-        console.log(this.freeDoctors);
-        return selectedDocs;
-    };
+    @action getFilterDoctors() {
+        let selectedDocs = [];
 
+        if (this.filters.name !== '' || this.filters.spec !== '') {
+            if (this.filters.name) {
+                selectedDocs = selectedDocs.concat(this.doctors
+                    .filter(el => el.name === this.filters.name));
+            }
+            if (this.filters.spec) {
+                selectedDocs = selectedDocs.concat(this.doctors
+                    .filter(el => el.spec === this.filters.spec));
+            }
+        } else {
+            selectedDocs = this.doctors;
+        }
+        
+        // selectedDocs = this.filters;
+        // console.log('docs from filter', docs);
+        // docs.forEach(el => {
+        //     if (el.working.days.start <= moment(config.startDate, 'YY/MM/DD HH:mm').format('YY/MM/DD') ||
+        //         el.working.days.end >= moment(config.endDate, 'YY/MM/DD HH:mm').format('YY/MM/DD')) {
+        //         selectedDocs.push(el);
+        //     }
+        // });
+        // this.freeDoctors.push(selectedDocs);
+        
+        this.selectedDocs = selectedDocs;
+        // return selectedDocs;
+    }
+
+    setFilterDoctors = (filter) => {
+        this.filters = filter;
+        this.getFilterDoctors();
+    }
 
     /**
      * функция выдает массив объектов событий исходя из массива объекта докторов
@@ -130,13 +171,14 @@ class Events {
      */
 
 
-    @action fetchAll = (min, max, startDate, endDate, spec) => {
+    @action fetchAll = (spec) => {
+        console.log('отфильтрованные доки', this.selectedDocs.slice());
         this.dates = [];
-        if (min > max) {
+        if (config.min > config.max) {
             throw new Error('Минимальное значение времени начала должно быть меньше времени окончания');
         }
 
-        if (startDate > endDate) {
+        if (config.startDate > config.endDate) {
             throw new Error('Начальная дата должна быть мольше конечной');
         }
 
@@ -144,16 +186,15 @@ class Events {
             throw new Error('не обнаружил докоторов или ошибка в формате докторов (должен быть массив):');
         }
 
-        let selectedDocs = this.doctors;
-        if (spec !== '') {
-            selectedDocs = this.filterDoctors(this.doctors, spec);
-        }
-        console.log('selectedDocs', selectedDocs);
+        let selectedDocs = this.selectedDocs;
+        // if (spec !== '') {
+        //     selectedDocs = this.filterDoctors(this.doctors, spec);
+        // }
 
         const newDate = {
             title: 'Blank',
-            start: startDate,
-            end: moment(startDate).add(1, 'h').toDate(),
+            start: config.startDate,
+            end: moment(config.startDate).add(1, 'h').toDate(),
         };
 
         let over = false;
@@ -162,7 +203,7 @@ class Events {
             const currentTime = moment(newDate.start).format('HH:mm');
             const currentDate = moment(newDate.start).format('YY/MM/DD');
 
-            if (currentTime >= min && currentTime < max) {
+            if (currentTime >= config.min && currentTime < config.max) {
                 const addNew = {
                     title: 'Записаться',
                     start: newDate.start,
@@ -186,9 +227,8 @@ class Events {
                         // отфильтровываем докторов которые заняты в это время
                         const busy = selectedDocs[x].busy.filter(el => el.start === currentDate + ' ' + currentTime);
 
-                        if (busy.length === 0) {
-                            desc.name.push(selectedDocs[x].name);
-                        }
+                        // елси док в это время не занят, пихаем его имя в моссив
+                        busy.length === 0 && desc.name.push(selectedDocs[x].name);
 
                         desc.speciality.push(selectedDocs[x].spec);
                         addNew.status = (desc.name.length === selectedDocs.length) ?
@@ -197,17 +237,13 @@ class Events {
                     } else {
                         desc.status = (desc.name.length === 0) ? ['NA'] : desc.status;
                     }
-                    // addNew.desc = desc.name;
-                    // addNew.speciality = desc.speciality;
+
                     addNew.desc = desc;
                     addNew.title = (desc.name[0]) ? 'Записаться' : 'NA';
                 }
                 this.dates.push(addNew);
-                if (moment(this.dates[i].start).format('LLL') === moment(endDate).format('LLL')) {
-                    console.log(`I'm doAAAne`);
-                    // console.log(this.dates.slice());
+                if (moment(this.dates[i].start).format('LLL') === moment(config.endDate).format('LLL')) {
                     over = true;
-                    // console.log(this.dates);
                 }
                 i++;
             }
@@ -217,7 +253,6 @@ class Events {
 
             // защита от переполнения
             if (i === 10000) {
-                // console.log(dates);
                 over = true;
                 console.warn('Больно большой массв', this.dates);
             }
@@ -231,6 +266,12 @@ class Events {
                 el.busy.push(dates);
             }
         });
+    }
+
+    @action getDocs = (docName, docSpec) => {
+        const name = this.doctors.filter(doc => doc.name === docName);
+        const specialty = this.doctors.filter(doc => doc.spec === docSpec);
+        return { name, specialty, };
     }
 }
 
