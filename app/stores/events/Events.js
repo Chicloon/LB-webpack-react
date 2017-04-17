@@ -118,6 +118,8 @@ class Events {
     };
     @observable isLoading = false;
     @observable selectedDocs = this.doctors;
+    @observable namesList = this.doctors;
+
     /**
      * функция возвращает массив докторов отфильтрованные по специальности
      * 
@@ -127,19 +129,35 @@ class Events {
     @action getFilterDoctors() {
         let selectedDocs = [];
 
-        if (this.filters.name !== '' || this.filters.spec !== '') {
-            if (this.filters.name) {
-                selectedDocs = selectedDocs.concat(this.doctors
-                    .filter(el => el.name === this.filters.name));
-            }
-            if (this.filters.spec) {
-                selectedDocs = selectedDocs.concat(this.doctors
-                    .filter(el => el.spec === this.filters.spec));
-            }
-        } else {
+
+        console.log(this.doctors.map(el => el.name));
+        if (this.filters.spec !== '') {
+            selectedDocs = selectedDocs.concat(this.doctors
+                .filter(el => el.spec === this.filters.spec));
+            this.namesList = selectedDocs.slice();
+        } else {         
             selectedDocs = this.doctors;
+            this.namesList = this.doctors;
         }
-        
+
+        // if (this.filters.name !== '' || this.filters.spec !== '') {
+        //     if (this.filters.name) {
+        //         selectedDocs = this.doctors
+        //             .filter(el => el.name === this.filters.name);
+        //     }
+        //     if (this.filters.spec) {
+        //         selectedDocs = selectedDocs.concat(this.doctors
+        //             .filter(el => el.spec === this.filters.spec));
+        //     }
+
+
+
+        if (this.filters.name !== '') {
+            selectedDocs = this.doctors
+                .filter(el => el.name === this.filters.name);
+        } else {
+            // this.namesList = this.doctors;
+        }
         // selectedDocs = this.filters;
         // console.log('docs from filter', docs);
         // docs.forEach(el => {
@@ -149,7 +167,7 @@ class Events {
         //     }
         // });
         // this.freeDoctors.push(selectedDocs);
-        
+        console.log('namesList', this.namesList);
         this.selectedDocs = selectedDocs;
         // return selectedDocs;
     }
