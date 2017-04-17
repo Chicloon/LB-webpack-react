@@ -43,14 +43,15 @@ class CalendarHeader extends React.Component {
         this.props.events.fetchAll();
     }
 
-    namesList = () => 
-            <select name="doctors" ref='name' onChange={this.setFilerValue} size='5' multiple>
-                <option value='' key='any' > Любое </option>
-                {this.props.events.namesList.map(doc =>
-                    <option value={doc.name} key={doc.name}> {doc.name} </option>
-                )}
-            </select>;
-    }
+    namesList = () =>
+        <select name="doctors" ref='name' onChange={this.setFilerValue} size='5' multiple>
+            <option value='' key='any' > Любое </option>
+            {this.props.events.namesList.map(doc =>
+                <option value={doc.name} key={doc.name}> {doc.name} </option>
+            )}
+        </select>;
+
+
 
     selectedDoctor = () =>
         <div>
@@ -61,39 +62,39 @@ class CalendarHeader extends React.Component {
                 this.props.events.selectedDocs[0].spec : this.searchFields.spec}
             <hr />
         </div>;
+
+
+
+    render() {
+        return (
+            <div>
+                <fieldset>
+                    <legend>Выберете врача</legend>
+                    {this.searchFields.spec !== '' || this.searchFields.name !== '' ?
+                        this.selectedDoctor() : ''}
+                    <div className="pure-u-12-24">
+                        <fieldset>
+                            <legend>Специальность</legend>
+                            <select name="doctors" ref='spec' onChange={this.setFilerValue}>
+                                {this.specs.length === 0}
+                                <option value='' key='any'> Любая </option>
+                                {this.specs.map(spec =>
+                                    <option value={spec} key={spec}> {spec} </option>
+                                )}
+                            </select>
+                        </fieldset>
+                    </div>
+                    <div className="pure-u-12-24">
+                        <fieldset >
+                            <legend>Имя</legend>
+                            {this.namesList()}
+                        </fieldset>
+
+                    </div>
+                </fieldset>
+            </div >
+        );
+    }
 }
 
-
-render() {
-    return (
-        <div>
-            <fieldset>
-                <legend>Выберете врача</legend>
-                {this.searchFields.spec !== '' || this.searchFields.name !== '' ?
-                    this.selectedDoctor() : ''}
-                <div className="pure-u-12-24">
-                    <fieldset>
-                        <legend>Специальность</legend>
-                        <select name="doctors" ref='spec' onChange={this.setFilerValue}>
-                            {this.specs.length === 0}
-                            <option value='' key='any'> Любая </option>
-                            {this.specs.map(spec =>
-                                <option value={spec} key={spec}> {spec} </option>
-                            )}
-                        </select>
-                    </fieldset>
-                </div>
-                <div className="pure-u-12-24">
-                    <fieldset >
-                        <legend>Имя</legend>
-                        {this.namesList()}
-                    </fieldset>
-
-                </div>
-            </fieldset>
-        </div >
-    );
-}
-}
-
-export default CalendarHeader;
+    export default CalendarHeader;
