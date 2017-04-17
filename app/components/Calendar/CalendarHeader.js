@@ -43,67 +43,57 @@ class CalendarHeader extends React.Component {
         this.props.events.fetchAll();
     }
 
-    namesList = () => {
-        // this.props.events.selectedDocs.map(doc =>
-        //     this.specs.indexOf(doc.spec) === -1 && this.specs.push(doc.spec)
-        // );
-        console.log('доки для имен', this.props.events.selectedDocs.slice());
-        return (
+    namesList = () => 
             <select name="doctors" ref='name' onChange={this.setFilerValue} size='5' multiple>
                 <option value='' key='any' > Любое </option>
                 {this.props.events.namesList.map(doc =>
                     <option value={doc.name} key={doc.name}> {doc.name} </option>
                 )}
-            </select>
-        );
+            </select>;
     }
 
-    selectedDoctor = () => {
-        console.log('спецы', this.props.events.selectedDocs[0].spec);
-        if (this.searchFields.spec !== '' || this.searchFields.name !== '') {
-            return (
-                <div>
-                    Вы выбрали врача: {this.searchFields.name ?
-                        this.searchFields.name : 'Не выбрано'}
-                    <br />
-                    Специальность врача: {this.searchFields.name ?
-                        this.props.events.selectedDocs[0].spec : this.searchFields.spec}
-                    <hr />
-                    </div>
-            );
-        }
-    }
+    selectedDoctor = () =>
+        <div>
+            Вы выбрали врача: {this.searchFields.name ?
+                this.searchFields.name : 'Не выбрано'}
+            <br />
+            Специальность врача: {this.searchFields.name ?
+                this.props.events.selectedDocs[0].spec : this.searchFields.spec}
+            <hr />
+        </div>;
+}
 
 
-    render() {
-        return (
-            <div>
-                <fieldset>
-                    <legend>Выберете врача</legend>
-                    {this.selectedDoctor()}
-                    <div className="pure-u-12-24">
-                        <fieldset>
-                            <legend>Специальность</legend>
-                            <select name="doctors" ref='spec' onChange={this.setFilerValue}>
-                                {this.specs.length === 0}
-                                <option value='' key='any'> Любая </option>
-                                {this.specs.map(spec =>
-                                    <option value={spec} key={spec}> {spec} </option>
-                                )}
-                            </select>
-                        </fieldset>
-                    </div>
-                    <div className="pure-u-12-24">
-                        <fieldset >
-                            <legend>Имя</legend>
-                            {this.namesList()}
-                        </fieldset>
+render() {
+    return (
+        <div>
+            <fieldset>
+                <legend>Выберете врача</legend>
+                {this.searchFields.spec !== '' || this.searchFields.name !== '' ?
+                    this.selectedDoctor() : ''}
+                <div className="pure-u-12-24">
+                    <fieldset>
+                        <legend>Специальность</legend>
+                        <select name="doctors" ref='spec' onChange={this.setFilerValue}>
+                            {this.specs.length === 0}
+                            <option value='' key='any'> Любая </option>
+                            {this.specs.map(spec =>
+                                <option value={spec} key={spec}> {spec} </option>
+                            )}
+                        </select>
+                    </fieldset>
+                </div>
+                <div className="pure-u-12-24">
+                    <fieldset >
+                        <legend>Имя</legend>
+                        {this.namesList()}
+                    </fieldset>
 
-                    </div>
-                </fieldset>
-            </div >
-        );
-    }
+                </div>
+            </fieldset>
+        </div >
+    );
+}
 }
 
 export default CalendarHeader;
