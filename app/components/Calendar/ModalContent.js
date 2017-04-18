@@ -22,16 +22,14 @@ class ModalContent extends React.Component {
         console.log('doctors', this.props.events.doctors);
         e.preventDefault();
         console.log(this.refs.doctor.value);
+        // this.props.events.fetchAll();
         this.props.events.addNew(this.refs.doctor.value, this.props.info.dates);
-        this.props.events.fetchAll();
 
         this.props.close();
     }
 
     render() {
-        console.log('myprops', this.props);
         return (
-
             <div>
                 <button onClick={this.props.close} className="closeModal">X</button>
                 {this.props.info.doctors.length > 0 ?

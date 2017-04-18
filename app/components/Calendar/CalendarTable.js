@@ -1,4 +1,5 @@
 import BigCalendar from 'react-big-calendar';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
 import React from 'react';
 import Modal from 'react-modal';
@@ -9,7 +10,6 @@ import Spinner from 'components/Spinner';
 
 import config from './calendarConfig';
 
-import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './Calendar.less';
 
 moment.locale('ru');
@@ -37,7 +37,7 @@ class CalendarTable extends React.Component {
     EventWeek = ({ event }) => {
         // console.log(event);
         return <span>
-            <em style={{ color: 'magenta' }}>{event.title}</em>
+            <em style={{ color: '#2cdad3'}}>{event.title}</em>
             <p>{event.desc.name.slice()}</p>
         </span>
     }
@@ -219,9 +219,7 @@ class CalendarTable extends React.Component {
             return <Spinner />;
         }
         return (
-
             <div className='calendar-table' onMouseMove={this.getCoords}>
-
                 <Modal
                     isOpen={this.state.showModal}
                     contentLabel="onRequestClose Example"
@@ -230,9 +228,7 @@ class CalendarTable extends React.Component {
                     overlayClassName="Overlay"
                     style={this.modalStyle}
                 >
-                    {/*{this.modalContent()}*/}
                     <ModalContent key='modal' info={this.modalInfo} close={this.handleCloseModal} />
-
                 </Modal>
                 <BigCalendar
                     onSelectEvent={this.onSelect}

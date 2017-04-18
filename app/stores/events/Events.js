@@ -6,111 +6,6 @@ import config from '../../components/Calendar/calendarConfig';
 
 
 class Events {
-
-    // doctors = [
-    //     {
-    //         spec: 'sergeon',
-    //         name: 'Jon',
-    //         working: {
-    //             days: {
-    //                 start: '15/04/10',
-    //                 end: moment(new Date()).format('YY/MM/DD'),
-    //             },
-    //             hours: {
-    //                 start: '10:00',
-    //                 end: '15:00',
-    //             },
-    //         },
-    //         busy: [
-    //             {
-    //                 start: `${moment(new Date()).format('YY/MM/DD')} 16:00`,
-    //                 end: `${moment(new Date()).format('YY/MM/DD')} 17:00`,
-    //             },
-    //         ],
-
-    //     },
-    //     {
-    //         spec: 'terapeft',
-    //         name: 'Bob',
-    //         working: {
-    //             days: {
-    //                 start: '15/04/12',
-    //                 end: moment(new Date()).add(4, 'd').format('YY/MM/DD'),
-    //             },
-    //             hours: {
-    //                 start: '10:00',
-    //                 end: '16:00',
-    //             },
-    //         },
-    //         busy: [
-    //             {
-    //                 start: `${moment(new Date()).format('YY/MM/DD')} 10:00`,
-    //                 end: `${moment(new Date()).format('YY/MM/DD')} 11:00`,
-    //             },
-    //             {
-    //                 start: `${moment(new Date()).format('YY/MM/DD')} 11:00`,
-    //                 end: `${moment(new Date()).format('YY/MM/DD')} 12:00`,
-    //             },
-    //         ],
-    //     },
-    //     {
-    //         spec: 'dantist',
-    //         name: 'Mike',
-    //         working: {
-    //             days: {
-    //                 start: moment(new Date()).format('YY/MM/DD'),
-    //                 end: moment(new Date()).add(4, 'd').format('YY/MM/DD'),
-    //             },
-    //             hours: {
-    //                 start: '10:00',
-    //                 end: '13:00',
-    //             },
-    //         },
-    //         busy: [
-    //             {
-    //                 start: `${moment(new Date()).format('YY/MM/DD')} 11:00`,
-    //                 end: `${moment(new Date()).format('YY/MM/DD')} 12:00`,
-    //             },
-    //             {
-    //                 start: `${moment(new Date()).add(1, 'd').format('YY/MM/DD')} 11:00`,
-    //                 end: `${moment(new Date()).add(1, 'd').format('YY/MM/DD')} 12:00`,
-    //             },
-    //             {
-    //                 start: `${moment(new Date()).add(2, 'd').format('YY/MM/DD')} 12:00`,
-    //                 end: `${moment(new Date()).add(2, 'd').format('YY/MM/DD')} 13:00`,
-    //             },
-    //         ],
-    //     },
-    //     {
-    //         spec: 'dantist',
-    //         name: 'Ken dantist',
-    //         working: {
-    //             days: {
-    //                 start: moment(new Date()).format('YY/MM/DD'),
-    //                 end: moment(new Date()).add(4, 'd').format('YY/MM/DD'),
-    //             },
-    //             hours: {
-    //                 start: '10:00',
-    //                 end: '13:00',
-    //             },
-    //         },
-    //         busy: [
-    //             {
-    //                 start: `${moment(new Date()).add(1, 'd').format('YY/MM/DD')} 11:00`,
-    //                 end: `${moment(new Date()).add(1, 'd').format('YY/MM/DD')} 12:00`,
-    //             },
-    //             {
-    //                 start: `${moment(new Date()).add(2, 'd').format('YY/MM/DD')} 12:00`,
-    //                 end: `${moment(new Date()).add(2, 'd').format('YY/MM/DD')} 13:00`,
-    //             },
-    //             {
-    //                 start: `${moment(new Date()).add(3, 'd').format('YY/MM/DD')} 12:00`,
-    //                 end: `${moment(new Date()).add(3, 'd').format('YY/MM/DD')} 13:00`,
-    //             },
-    //         ],
-    //     },
-    // ];
-
     path = '/Doctors';
     @observable doctors = [];
     @observable dates = [];
@@ -304,8 +199,6 @@ class Events {
     @action addNew = (docName, busyDates) => {
         this.doctors.forEach(el => {
             if (el.name === docName) {
-                console.log('clicked doc', el);
-                console.log(busyDates, el.busy.concat(busyDates));
                 this.patch(el.id, { busy: el.busy.concat(busyDates) });
             }
         });
@@ -318,7 +211,7 @@ class Events {
         const status = await response.status;
 
         if (status === 200) {
-            this.isLoading = false;
+            // this.isLoading = false;
             this.fetchAll();
         }
     }

@@ -16,8 +16,6 @@ class Calendar extends React.Component {
     }
 
     render() {
-  
-
         return (
             <div className='calendar-main'>
                 <CalendarHeader specs={this.specs} />
