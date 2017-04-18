@@ -8,10 +8,16 @@ import config from './calendarConfig';
 
 @observer(['events'])
 class Calendar extends React.Component {
+    specs = [];
+    componentWillMount() {
+        this.props.events.fetchAll();
+    }
+
     render() {
+        console.log('specs form main component', this.specs);
         return (
             <div className='calendar-main'>
-                <CalendarHeader />
+                <CalendarHeader specs = {this.specs}/>
                 <CalendarTable />
             </div>
         );

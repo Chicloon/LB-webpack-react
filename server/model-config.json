@@ -35,5 +35,9 @@
   "Contacts": {
     "dataSource": "mongoDs",
     "public": true
+  },
+  "Doctors": {
+    "dataSource": "mongoDs",
+    "public": true
   }
 }

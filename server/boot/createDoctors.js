@@ -1,5 +1,4 @@
-
-import moment from 'moment';
+const moment = require('moment');
 
 moment.locale('ru');
 
@@ -79,7 +78,7 @@ const doctors = [
     },
     {
         spec: 'dantist',
-        name: 'Ken dantist',
+        name: 'Ken',
         working: {
             days: {
                 start: moment(new Date()).format('YY/MM/DD'),
@@ -107,4 +106,15 @@ const doctors = [
     },
 ];
 
-export default doctors;
+module.exports = (app) => {
+    app.dataSources.mongoDs.automigrate('Doctors', (err) => {
+        if (err) throw err;
+
+        app.models.Doctors.create(
+            doctors, (err, doctorsCreated) => {
+                if (err) throw err;
+
+                console.log('Models created: \n', doctorsCreated);
+            });
+    });
+};

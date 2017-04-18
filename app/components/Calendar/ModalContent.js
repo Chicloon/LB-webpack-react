@@ -23,7 +23,7 @@ class ModalContent extends React.Component {
         e.preventDefault();
         console.log(this.refs.doctor.value);
         this.props.events.addNew(this.refs.doctor.value, this.props.info.dates);
-        this.props.events.fetchAll(config.min, config.max, config.startDate, config.endDate, '');
+        this.props.events.fetchAll();
 
         this.props.close();
     }

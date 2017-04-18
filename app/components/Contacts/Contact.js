@@ -11,6 +11,10 @@ class Contact extends React.Component {
     e.preventDefault();
     this.props.contacts.remove(this.props.id);
   }
+  patchContact = (e) => {
+    e.preventDefault();
+    this.props.contacts.patch(this.props.id);
+  }
 
   render() {
     return (
@@ -22,9 +26,14 @@ class Contact extends React.Component {
         </h2>
         <p>{this.props.email}</p>
         <a href='#'
-           className={`${styles.removeButton} pure-button`}
-           onClick={this.removeContact}>
-           Remove
+          className={`${styles.removeButton} pure-button`}
+          onClick={this.removeContact}>
+          Remove
+        </a>
+        <a href='#'
+          className={`${styles.removeButton} pure-button`}
+          onClick={this.patchContact}>
+          Patch
         </a>
       </div>
     );

@@ -8,7 +8,7 @@ class Contacts {
   @observable isLoading = false;
 
   @action async fetchAll() {
-    this.isLoading = false;
+    this.isLoading = true;
     const response = await Api.get(this.path);
     const status = await response.status;
 
@@ -16,6 +16,7 @@ class Contacts {
       // const json = await response.json();
       // this.all = await json.data;
       this.all = await response.json();
+      this.isLoading = false;
     }
   }
 
@@ -33,6 +34,20 @@ class Contacts {
       this.all.slice().filter(
         c => c.id === contactId)[0]
     );
+  }
+
+  @action async patch(contactId) {
+    this.isLoading = true;
+    const response = await Api.patch(`${this.path}/${contactId}`, {
+  first_name: "strinasdfasdfg",
+ 
+ });
+    const status = await response.status;
+
+    if (status === 200) {
+      this.isLoading = false;
+      this.fetchAll();
+    }
   }
 
   @action async remove(contactId) {

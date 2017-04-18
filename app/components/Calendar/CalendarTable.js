@@ -19,7 +19,6 @@ BigCalendar.momentLocalizer(moment); // or globalizeLocalizer
 class CalendarTable extends React.Component {
 
     componentWillMount() {
-        this.props.events.fetchAll(config.min, config.max, config.startDate, config.endDate, '');
         this.setState({ showModal: false });
     }
 

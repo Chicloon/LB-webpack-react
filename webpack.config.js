@@ -23,15 +23,32 @@ module.exports = {
           'style-loader',
           'css-loader',
         ],
-      },{
+      }, {
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              hash: 'sha512',
+              digest: 'hex',
+              name: '[hash].[ext]',
+            },
+          }, {
+            loader: 'image-webpack-loader',
+            options: {
+              bypassOnDebug: true,
+            },
+          },
+        ],
+      }, {
         test: /\.less$/,
-            use: [{
-                loader: "style-loader" // creates style nodes from JS strings
-            }, {
-                loader: "css-loader" // translates CSS into CommonJS
-            }, {
-                loader: "less-loader" // compiles Less to CSS
-            }],
+        use: [{
+          loader: "style-loader" // creates style nodes from JS strings
+        }, {
+          loader: "css-loader" // translates CSS into CommonJS
+        }, {
+          loader: "less-loader" // compiles Less to CSS
+        }],
       },
       {
         test: /\.(scss|sass)$/,

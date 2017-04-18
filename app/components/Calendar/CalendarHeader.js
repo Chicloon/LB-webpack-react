@@ -8,24 +8,9 @@ class CalendarHeader extends React.Component {
         name: '',
         spec: '',
     }
-    componentWillMount() {
-        this.props.events.doctors.map(doc =>
-            this.specs.indexOf(doc.spec) === -1 && this.specs.push(doc.spec)
-        );
-    }
-    // //     this.setState({
-    // //         specs: this.specs,
-    //     });
-    // }
 
-    getFilteredDocs = (e) => {
-        e.preventDefault();
-        console.log(this.props.events.getDocs('name', 'spec'));
-        this.props.events.getDocs('name', 'spec');
-        console.log(e.nativeEvent);
-    }
-
-    setFilerValue = () => {
+    setFilterValue = () => {
+        console.log('setFilterValue');
         // this.setState({
         //     specs: (this.refs.name.value !== '') ?
         //         this.props.events.doctors.filter(el => el.name === this.refs.name.value)[0].spec
@@ -44,7 +29,8 @@ class CalendarHeader extends React.Component {
     }
 
     namesList = () =>
-        <select name="doctors" ref='name' onChange={this.setFilerValue} size='5' multiple>
+        <select name="doctors" ref='name' onChange={this.setFilterValue} size='5' multiple>
+            {console.log('namesList')}
             <option value='' key='any' > Любое </option>
             {this.props.events.namesList.map(doc =>
                 <option value={doc.name} key={doc.name}> {doc.name} </option>
@@ -63,7 +49,21 @@ class CalendarHeader extends React.Component {
             <hr />
         </div>;
 
+    specsList = () => {
+        console.log('specsList');
+        this.specs.length === 0 && this.props.events.selectedDocs.map(doc =>
+            this.specs.indexOf(doc.spec) === -1 && this.specs.push(doc.spec)
+        );
+        return (
+            <select name="doctors" ref='spec' onChange={this.setFilterValue}>
 
+                <option value='' key='any'> Любая </option>
+                {this.specs.map(spec =>
+                    <option value={spec} key={spec}> {spec} </option>
+                )}
+            </select>
+        );
+    }
 
     render() {
         return (
@@ -75,13 +75,7 @@ class CalendarHeader extends React.Component {
                     <div className="pure-u-12-24">
                         <fieldset>
                             <legend>Специальность</legend>
-                            <select name="doctors" ref='spec' onChange={this.setFilerValue}>
-                                {this.specs.length === 0}
-                                <option value='' key='any'> Любая </option>
-                                {this.specs.map(spec =>
-                                    <option value={spec} key={spec}> {spec} </option>
-                                )}
-                            </select>
+                            {this.specsList()}
                         </fieldset>
                     </div>
                     <div className="pure-u-12-24">
@@ -89,7 +83,6 @@ class CalendarHeader extends React.Component {
                             <legend>Имя</legend>
                             {this.namesList()}
                         </fieldset>
-
                     </div>
                 </fieldset>
             </div >
@@ -97,4 +90,4 @@ class CalendarHeader extends React.Component {
     }
 }
 
-    export default CalendarHeader;
+export default CalendarHeader;

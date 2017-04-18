@@ -1,124 +1,126 @@
 import { observable, action, computed } from 'mobx';
 import moment from 'moment';
-// import Api from 'helpers/api';
+
+import Api from 'helpers/api';
 import config from '../../components/Calendar/calendarConfig';
 
 
 class Events {
 
-    doctors = [
-        {
-            spec: 'sergeon',
-            name: 'Jon',
-            working: {
-                days: {
-                    start: '15/04/10',
-                    end: moment(new Date()).format('YY/MM/DD'),
-                },
-                hours: {
-                    start: '10:00',
-                    end: '15:00',
-                },
-            },
-            busy: [
-                {
-                    start: `${moment(new Date()).format('YY/MM/DD')} 16:00`,
-                    end: `${moment(new Date()).format('YY/MM/DD')} 17:00`,
-                },
-            ],
+    // doctors = [
+    //     {
+    //         spec: 'sergeon',
+    //         name: 'Jon',
+    //         working: {
+    //             days: {
+    //                 start: '15/04/10',
+    //                 end: moment(new Date()).format('YY/MM/DD'),
+    //             },
+    //             hours: {
+    //                 start: '10:00',
+    //                 end: '15:00',
+    //             },
+    //         },
+    //         busy: [
+    //             {
+    //                 start: `${moment(new Date()).format('YY/MM/DD')} 16:00`,
+    //                 end: `${moment(new Date()).format('YY/MM/DD')} 17:00`,
+    //             },
+    //         ],
 
-        },
-        {
-            spec: 'terapeft',
-            name: 'Bob',
-            working: {
-                days: {
-                    start: '15/04/12',
-                    end: moment(new Date()).add(4, 'd').format('YY/MM/DD'),
-                },
-                hours: {
-                    start: '10:00',
-                    end: '16:00',
-                },
-            },
-            busy: [
-                {
-                    start: `${moment(new Date()).format('YY/MM/DD')} 10:00`,
-                    end: `${moment(new Date()).format('YY/MM/DD')} 11:00`,
-                },
-                {
-                    start: `${moment(new Date()).format('YY/MM/DD')} 11:00`,
-                    end: `${moment(new Date()).format('YY/MM/DD')} 12:00`,
-                },
-            ],
-        },
-        {
-            spec: 'dantist',
-            name: 'Mike',
-            working: {
-                days: {
-                    start: moment(new Date()).format('YY/MM/DD'),
-                    end: moment(new Date()).add(4, 'd').format('YY/MM/DD'),
-                },
-                hours: {
-                    start: '10:00',
-                    end: '13:00',
-                },
-            },
-            busy: [
-                {
-                    start: `${moment(new Date()).format('YY/MM/DD')} 11:00`,
-                    end: `${moment(new Date()).format('YY/MM/DD')} 12:00`,
-                },
-                {
-                    start: `${moment(new Date()).add(1, 'd').format('YY/MM/DD')} 11:00`,
-                    end: `${moment(new Date()).add(1, 'd').format('YY/MM/DD')} 12:00`,
-                },
-                {
-                    start: `${moment(new Date()).add(2, 'd').format('YY/MM/DD')} 12:00`,
-                    end: `${moment(new Date()).add(2, 'd').format('YY/MM/DD')} 13:00`,
-                },
-            ],
-        },
-        {
-            spec: 'dantist',
-            name: 'Ken dantist',
-            working: {
-                days: {
-                    start: moment(new Date()).format('YY/MM/DD'),
-                    end: moment(new Date()).add(4, 'd').format('YY/MM/DD'),
-                },
-                hours: {
-                    start: '10:00',
-                    end: '13:00',
-                },
-            },
-            busy: [
-                {
-                    start: `${moment(new Date()).add(1, 'd').format('YY/MM/DD')} 11:00`,
-                    end: `${moment(new Date()).add(1, 'd').format('YY/MM/DD')} 12:00`,
-                },
-                {
-                    start: `${moment(new Date()).add(2, 'd').format('YY/MM/DD')} 12:00`,
-                    end: `${moment(new Date()).add(2, 'd').format('YY/MM/DD')} 13:00`,
-                },
-                {
-                    start: `${moment(new Date()).add(3, 'd').format('YY/MM/DD')} 12:00`,
-                    end: `${moment(new Date()).add(3, 'd').format('YY/MM/DD')} 13:00`,
-                },
-            ],
-        },
-    ];
+    //     },
+    //     {
+    //         spec: 'terapeft',
+    //         name: 'Bob',
+    //         working: {
+    //             days: {
+    //                 start: '15/04/12',
+    //                 end: moment(new Date()).add(4, 'd').format('YY/MM/DD'),
+    //             },
+    //             hours: {
+    //                 start: '10:00',
+    //                 end: '16:00',
+    //             },
+    //         },
+    //         busy: [
+    //             {
+    //                 start: `${moment(new Date()).format('YY/MM/DD')} 10:00`,
+    //                 end: `${moment(new Date()).format('YY/MM/DD')} 11:00`,
+    //             },
+    //             {
+    //                 start: `${moment(new Date()).format('YY/MM/DD')} 11:00`,
+    //                 end: `${moment(new Date()).format('YY/MM/DD')} 12:00`,
+    //             },
+    //         ],
+    //     },
+    //     {
+    //         spec: 'dantist',
+    //         name: 'Mike',
+    //         working: {
+    //             days: {
+    //                 start: moment(new Date()).format('YY/MM/DD'),
+    //                 end: moment(new Date()).add(4, 'd').format('YY/MM/DD'),
+    //             },
+    //             hours: {
+    //                 start: '10:00',
+    //                 end: '13:00',
+    //             },
+    //         },
+    //         busy: [
+    //             {
+    //                 start: `${moment(new Date()).format('YY/MM/DD')} 11:00`,
+    //                 end: `${moment(new Date()).format('YY/MM/DD')} 12:00`,
+    //             },
+    //             {
+    //                 start: `${moment(new Date()).add(1, 'd').format('YY/MM/DD')} 11:00`,
+    //                 end: `${moment(new Date()).add(1, 'd').format('YY/MM/DD')} 12:00`,
+    //             },
+    //             {
+    //                 start: `${moment(new Date()).add(2, 'd').format('YY/MM/DD')} 12:00`,
+    //                 end: `${moment(new Date()).add(2, 'd').format('YY/MM/DD')} 13:00`,
+    //             },
+    //         ],
+    //     },
+    //     {
+    //         spec: 'dantist',
+    //         name: 'Ken dantist',
+    //         working: {
+    //             days: {
+    //                 start: moment(new Date()).format('YY/MM/DD'),
+    //                 end: moment(new Date()).add(4, 'd').format('YY/MM/DD'),
+    //             },
+    //             hours: {
+    //                 start: '10:00',
+    //                 end: '13:00',
+    //             },
+    //         },
+    //         busy: [
+    //             {
+    //                 start: `${moment(new Date()).add(1, 'd').format('YY/MM/DD')} 11:00`,
+    //                 end: `${moment(new Date()).add(1, 'd').format('YY/MM/DD')} 12:00`,
+    //             },
+    //             {
+    //                 start: `${moment(new Date()).add(2, 'd').format('YY/MM/DD')} 12:00`,
+    //                 end: `${moment(new Date()).add(2, 'd').format('YY/MM/DD')} 13:00`,
+    //             },
+    //             {
+    //                 start: `${moment(new Date()).add(3, 'd').format('YY/MM/DD')} 12:00`,
+    //                 end: `${moment(new Date()).add(3, 'd').format('YY/MM/DD')} 13:00`,
+    //             },
+    //         ],
+    //     },
+    // ];
 
-
+    path = '/Doctors';
+    @observable doctors = [];
     @observable dates = [];
     @observable filters = {
         name: '',
         spec: '',
     };
     @observable isLoading = false;
-    @observable selectedDocs = this.doctors;
-    @observable namesList = this.doctors;
+    @observable selectedDocs = [];
+    @observable namesList = [];
 
     /**
      * функция возвращает массив докторов отфильтрованные по специальности
@@ -126,55 +128,72 @@ class Events {
      * @param {Array} doctors - массив докоторов
      * @param {string} spec - специлальность доктора по которой надо отфильтровать
      */
-    @action getFilterDoctors() {
+    @action async fetchAll() {
         let selectedDocs = [];
 
+        this.isLoading = false;
+        const response = await Api.get(this.path);
+        const status = await response.status;
+        console.log('status,', status);
+        // let doctors = [];
 
-        console.log(this.doctors.map(el => el.name));
-        if (this.filters.spec !== '') {
-            selectedDocs = selectedDocs.concat(this.doctors
-                .filter(el => el.spec === this.filters.spec));
-            this.namesList = selectedDocs.slice();
-        } else {         
-            selectedDocs = this.doctors;
-            this.namesList = this.doctors;
+        if (status === 200) {
+            // const json = await response.json();
+            // this.all = await json.data;
+            const doctors = await response.json();
+            this.doctors = doctors;
+            console.log('docs from api', doctors);
+            this.selectedDocs = doctors.slice();
+            this.namesList = doctors;
+
+
+            console.log(doctors.map(el => el.name));
+            if (this.filters.spec !== '') {
+                selectedDocs = selectedDocs.concat(this.doctors
+                    .filter(el => el.spec === this.filters.spec));
+                this.namesList = selectedDocs.slice();
+            } else {
+                selectedDocs = doctors;
+                this.namesList = doctors;
+            }
+
+            // if (this.filters.name !== '' || this.filters.spec !== '') {
+            //     if (this.filters.name) {
+            //         selectedDocs = this.doctors
+            //             .filter(el => el.name === this.filters.name);
+            //     }
+            //     if (this.filters.spec) {
+            //         selectedDocs = selectedDocs.concat(this.doctors
+            //             .filter(el => el.spec === this.filters.spec));
+            //     }
+
+
+
+            if (this.filters.name !== '') {
+                selectedDocs = doctors
+                    .filter(el => el.name === this.filters.name);
+            } else {
+                // this.namesList = this.doctors;
+            }
+            // selectedDocs = this.filters;
+            // console.log('docs from filter', docs);
+            // docs.forEach(el => {
+            //     if (el.working.days.start <= moment(config.startDate, 'YY/MM/DD HH:mm').format('YY/MM/DD') ||
+            //         el.working.days.end >= moment(config.endDate, 'YY/MM/DD HH:mm').format('YY/MM/DD')) {
+            //         selectedDocs.push(el);
+            //     }
+            // });
+            // this.freeDoctors.push(selectedDocs);
+            console.log('namesList', this.namesList);
+            this.selectedDocs = selectedDocs;
+            this.getEvents();
+            // return selectedDocs;
         }
-
-        // if (this.filters.name !== '' || this.filters.spec !== '') {
-        //     if (this.filters.name) {
-        //         selectedDocs = this.doctors
-        //             .filter(el => el.name === this.filters.name);
-        //     }
-        //     if (this.filters.spec) {
-        //         selectedDocs = selectedDocs.concat(this.doctors
-        //             .filter(el => el.spec === this.filters.spec));
-        //     }
-
-
-
-        if (this.filters.name !== '') {
-            selectedDocs = this.doctors
-                .filter(el => el.name === this.filters.name);
-        } else {
-            // this.namesList = this.doctors;
-        }
-        // selectedDocs = this.filters;
-        // console.log('docs from filter', docs);
-        // docs.forEach(el => {
-        //     if (el.working.days.start <= moment(config.startDate, 'YY/MM/DD HH:mm').format('YY/MM/DD') ||
-        //         el.working.days.end >= moment(config.endDate, 'YY/MM/DD HH:mm').format('YY/MM/DD')) {
-        //         selectedDocs.push(el);
-        //     }
-        // });
-        // this.freeDoctors.push(selectedDocs);
-        console.log('namesList', this.namesList);
-        this.selectedDocs = selectedDocs;
-        // return selectedDocs;
     }
 
     setFilterDoctors = (filter) => {
         this.filters = filter;
-        this.getFilterDoctors();
+        // this.getFilterDoctors();
     }
 
     /**
@@ -189,7 +208,8 @@ class Events {
      */
 
 
-    @action fetchAll = (spec) => {
+    @action getEvents = () => {
+
         console.log('отфильтрованные доки', this.selectedDocs.slice());
         this.dates = [];
         if (config.min > config.max) {
@@ -200,15 +220,16 @@ class Events {
             throw new Error('Начальная дата должна быть мольше конечной');
         }
 
-        if (!this.doctors || !Array.isArray(this.doctors)) {
-            throw new Error('не обнаружил докоторов или ошибка в формате докторов (должен быть массив):');
-        }
+        // if (!this.doctors || !Array.isArray(this.doctors)) {
+        //     throw new Error('не обнаружил докоторов или ошибка в формате докторов (должен быть массив):');
+        // }
 
         let selectedDocs = this.selectedDocs;
         // if (spec !== '') {
         //     selectedDocs = this.filterDoctors(this.doctors, spec);
         // }
 
+        // console.log('Выбранные доки', selectedDocs.slice());
         const newDate = {
             title: 'Blank',
             start: config.startDate,
@@ -278,12 +299,26 @@ class Events {
         while (!over);
     };
 
-    @action addNew = (docName, dates) => {
+    @action addNew = (docName, busyDates) => {
         this.doctors.forEach(el => {
             if (el.name === docName) {
-                el.busy.push(dates);
+                console.log('clicked doc', el);
+                console.log(busyDates, el.busy.concat(busyDates));
+                this.patch(el.id, { busy: el.busy.concat(busyDates) });
             }
         });
+    }
+
+    @action async patch(doctorId, data) {
+        console.log('data from patch method', doctorId, data);
+        this.isLoading = true;
+        const response = await Api.patch(`${this.path}/${doctorId}`, data);
+        const status = await response.status;
+
+        if (status === 200) {
+            this.isLoading = false;
+            this.fetchAll();
+        }
     }
 
     @action getDocs = (docName, docSpec) => {
