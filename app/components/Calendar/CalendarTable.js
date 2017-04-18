@@ -5,6 +5,7 @@ import Modal from 'react-modal';
 import { observer } from 'mobx-react';
 
 import ModalContent from './ModalContent';
+import Spinner from 'components/Spinner';
 
 import config from './calendarConfig';
 
@@ -214,6 +215,9 @@ class CalendarTable extends React.Component {
     }
 
     render() {
+        if (this.props.events.isLoading) {
+            return <Spinner />;
+        }
         return (
 
             <div className='calendar-table' onMouseMove={this.getCoords}>
@@ -237,7 +241,7 @@ class CalendarTable extends React.Component {
                     min={moment('10:00', 'HH:mm').toDate()}
                     max={moment('19:00', 'HH:mm').toDate()}
                     defaultDate={new Date()}
-                    defaultView='week'                    
+                    defaultView='week'
                     formats={config.formats}
                     onNavigate={this.eventNavigate}
                     eventPropGetter={this.eventStyleGetter}

@@ -3,7 +3,7 @@
     "name": "db",
     "connector": "memory"
   },
-   "mongoDs": {
+  "mongoDs": {
     "host": "localhost",
     "port": 27017,
     "url": "",
@@ -12,5 +12,17 @@
     "name": "mongoDs",
     "user": "",
     "connector": "mongodb"
+  },
+  "_commnets": {
+    "mongoDs": {
+      "host": "ds119370.mlab.com",
+      "port": 19370,
+      "url": "",
+      "database": "loopback",
+      "password": "user",
+      "name": "chicloon",
+      "user": "user",
+      "connector": "mongodb"
+    }
   }
 }

@@ -114,7 +114,7 @@ class Events {
     path = '/Doctors';
     @observable doctors = [];
     @observable dates = [];
-    @observable filters = {
+    filters = {
         name: '',
         spec: '',
     };
@@ -131,7 +131,7 @@ class Events {
     @action async fetchAll() {
         let selectedDocs = [];
 
-        this.isLoading = false;
+        this.isLoading = true;
         const response = await Api.get(this.path);
         const status = await response.status;
         console.log('status,', status);
@@ -187,6 +187,7 @@ class Events {
             console.log('namesList', this.namesList);
             this.selectedDocs = selectedDocs;
             this.getEvents();
+         
             // return selectedDocs;
         }
     }
@@ -283,6 +284,7 @@ class Events {
                 this.dates.push(addNew);
                 if (moment(this.dates[i].start).format('LLL') === moment(config.endDate).format('LLL')) {
                     over = true;
+                       this.isLoading = false;
                 }
                 i++;
             }

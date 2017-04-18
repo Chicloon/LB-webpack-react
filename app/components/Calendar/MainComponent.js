@@ -4,7 +4,9 @@ import { observer } from 'mobx-react';
 import CalendarTable from './CalendarTable';
 import CalendarHeader from './CalendarHeader';
 
-import config from './calendarConfig';
+// import config from './calendarConfig';
+
+
 
 @observer(['events'])
 class Calendar extends React.Component {
@@ -14,10 +16,11 @@ class Calendar extends React.Component {
     }
 
     render() {
-        console.log('specs form main component', this.specs);
+  
+
         return (
             <div className='calendar-main'>
-                <CalendarHeader specs = {this.specs}/>
+                <CalendarHeader specs={this.specs} />
                 <CalendarTable />
             </div>
         );
