@@ -52,18 +52,6 @@ class Events {
                 this.namesList = doctors;
             }
 
-            // if (this.filters.name !== '' || this.filters.spec !== '') {
-            //     if (this.filters.name) {
-            //         selectedDocs = this.doctors
-            //             .filter(el => el.name === this.filters.name);
-            //     }
-            //     if (this.filters.spec) {
-            //         selectedDocs = selectedDocs.concat(this.doctors
-            //             .filter(el => el.spec === this.filters.spec));
-            //     }
-
-
-
             if (this.filters.name !== '') {
                 selectedDocs = doctors
                     .filter(el => el.name === this.filters.name);
@@ -82,7 +70,7 @@ class Events {
             console.log('namesList', this.namesList);
             this.selectedDocs = selectedDocs;
             this.getEvents();
-         
+
             // return selectedDocs;
         }
     }
@@ -104,28 +92,19 @@ class Events {
      */
 
 
-    @action getEvents = () => {
-
+    getEvents = () => {
         console.log('отфильтрованные доки', this.selectedDocs.slice());
         this.dates = [];
-        if (config.min > config.max) {
-            throw new Error('Минимальное значение времени начала должно быть меньше времени окончания');
-        }
-
-        if (config.startDate > config.endDate) {
-            throw new Error('Начальная дата должна быть мольше конечной');
-        }
-
-        // if (!this.doctors || !Array.isArray(this.doctors)) {
-        //     throw new Error('не обнаружил докоторов или ошибка в формате докторов (должен быть массив):');
+        // if (config.min > config.max) {
+        //     throw new Error('Минимальное значение времени начала должно быть меньше времени окончания');
         // }
 
-        let selectedDocs = this.selectedDocs;
-        // if (spec !== '') {
-        //     selectedDocs = this.filterDoctors(this.doctors, spec);
+        // if (config.startDate > config.endDate) {
+        //     throw new Error('Начальная дата должна быть мольше конечной');
         // }
 
-        // console.log('Выбранные доки', selectedDocs.slice());
+        const selectedDocs = this.selectedDocs;
+
         const newDate = {
             title: 'Blank',
             start: config.startDate,
@@ -179,7 +158,7 @@ class Events {
                 this.dates.push(addNew);
                 if (moment(this.dates[i].start).format('LLL') === moment(config.endDate).format('LLL')) {
                     over = true;
-                       this.isLoading = false;
+                    this.isLoading = false;
                 }
                 i++;
             }

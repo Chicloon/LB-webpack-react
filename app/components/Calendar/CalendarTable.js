@@ -218,6 +218,7 @@ class CalendarTable extends React.Component {
         if (this.props.events.isLoading) {
             return <Spinner />;
         }
+        
         return (
             <div className='calendar-table' onMouseMove={this.getCoords}>
                 <Modal
@@ -234,8 +235,8 @@ class CalendarTable extends React.Component {
                     onSelectEvent={this.onSelect}
                     events={this.props.events.dates.slice()}
                     views={['week']}
-                    min={moment('10:00', 'HH:mm').toDate()}
-                    max={moment('19:00', 'HH:mm').toDate()}
+                    min={moment(config.min, 'HH:mm').toDate()}
+                    max={moment(config.max, 'HH:mm').toDate()}
                     defaultDate={new Date()}
                     defaultView='week'
                     formats={config.formats}

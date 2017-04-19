@@ -30,7 +30,7 @@ const doctors = [
         working: {
             days: {
                 start: '15/04/12',
-                end: moment(new Date()).add(4, 'd').format('YY/MM/DD'),
+                end: moment(new Date()).add(5, 'd').format('YY/MM/DD'),
             },
             hours: {
                 start: '10:00',
@@ -54,7 +54,7 @@ const doctors = [
         working: {
             days: {
                 start: moment(new Date()).format('YY/MM/DD'),
-                end: moment(new Date()).add(4, 'd').format('YY/MM/DD'),
+                end: moment(new Date()).add(7, 'd').format('YY/MM/DD'),
             },
             hours: {
                 start: '10:00',
@@ -82,7 +82,7 @@ const doctors = [
         working: {
             days: {
                 start: moment(new Date()).format('YY/MM/DD'),
-                end: moment(new Date()).add(4, 'd').format('YY/MM/DD'),
+                end: moment(new Date()).add(14, 'd').format('YY/MM/DD'),
             },
             hours: {
                 start: '10:00',
