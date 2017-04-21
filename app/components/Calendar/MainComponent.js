@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import CalendarTable from './CalendarTable';
 import CalendarHeader from './CalendarHeader';
 
+import styles from './Calendar.sass';
 
 @observer(['events'])
 class Calendar extends React.Component {
@@ -13,7 +14,7 @@ class Calendar extends React.Component {
 
     render() {
         return (
-            <div className='calendar-main'>
+            <div className={styles.calendarMain}>
                 <CalendarHeader />
                 <CalendarTable />
             </div>

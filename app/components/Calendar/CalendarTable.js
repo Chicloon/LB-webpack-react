@@ -10,6 +10,7 @@ import Spinner from 'components/Spinner';
 
 import config from './calendarConfig';
 
+import styles from './Calendar.sass';
 import './Calendar.less';
 
 moment.locale('ru');
@@ -37,7 +38,7 @@ class CalendarTable extends React.Component {
     EventWeek = ({ event }) => {
         // console.log(event);
         return <span>
-            <em style={{ color: '#2cdad3'}}>{event.title}</em>
+            <em style={{ color: '#2cdad3' }}>{event.title}</em>
             <p>{event.desc.name.slice()}</p>
         </span>
     }
@@ -218,15 +219,15 @@ class CalendarTable extends React.Component {
         if (this.props.events.isLoading) {
             return <Spinner />;
         }
-        
+
         return (
-            <div className='calendar-table' onMouseMove={this.getCoords}>
+            <div className={styles.calendarTable} onMouseMove={this.getCoords}>
                 <Modal
                     isOpen={this.state.showModal}
                     contentLabel="onRequestClose Example"
                     onRequestClose={this.handleCloseModal}
-                    className="Modal"
-                    overlayClassName="Overlay"
+                    className={styles.Modal}
+                    overlayClassName={styles.Overlay}
                     style={this.modalStyle}
                 >
                     <ModalContent key='modal' info={this.modalInfo} close={this.handleCloseModal} />

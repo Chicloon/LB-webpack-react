@@ -2,7 +2,7 @@ import React from 'react';
 import { observer } from 'mobx-react';
 
 import config from './calendarConfig';
-
+import styles from './Calendar.sass';
 
 // const min = moment('10:00', 'HH:mm').format('HH:mm');
 // const max = moment('18:00', 'HH:mm').format('HH:mm');
@@ -31,7 +31,7 @@ class ModalContent extends React.Component {
     render() {
         return (
             <div>
-                <button onClick={this.props.close} className="closeModal">X</button>
+                <button onClick={this.props.close} className={styles.closeModal}>X</button>
                 {this.props.info.doctors.length > 0 ?
                     <div>
                         <p> Выберете врача </p>

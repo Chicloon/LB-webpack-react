@@ -1,6 +1,8 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 
+import styles from './Calendar.sass';
+
 @observer(['events'])
 class CalendarHeader extends React.Component {
     specs = [];
@@ -9,34 +11,83 @@ class CalendarHeader extends React.Component {
         spec: '',
     }
 
-    setFilterValue = () => {
-        console.log('setFilterValue');
-        // this.setState({
-        //     specs: (this.refs.name.value !== '') ?
-        //         this.props.events.doctors.filter(el => el.name === this.refs.name.value)[0].spec
-        //         : this.specs,
-        // });
+    // setFilterValue = () => {
+    //     console.log('setFilterValue');
+    //     // this.setState({
+    //     //     specs: (this.refs.name.value !== '') ?
+    //     //         this.props.events.doctors.filter(el => el.name === this.refs.name.value)[0].spec
+    //     //         : this.specs,
+    //     // });
 
-        // console.log('specs', specs);
-        // console.log('state', this.state.specs);
-        this.searchFields = {
-            name: (this.refs.spec.value === this.searchFields.spec) ? this.refs.name.value : '',
-            spec: this.refs.spec.value,
-        };
+    //     // console.log('specs', specs);
+    //     // console.log('state', this.state.specs);
+    //     this.searchFields = {
+    //         name: (this.refs.spec.value === this.searchFields.spec) ? this.refs.name.value : '',
+    //         spec: this.refs.spec.value,
+    //     };
 
-        this.props.events.setFilterDoctors(this.searchFields);
-        this.props.events.fetchAll();
-    }
+    //     this.props.events.setFilterDoctors(this.searchFields);
+    //     this.props.events.fetchAll();
+    // }
 
     namesList = () =>
-        <select name="doctors" ref='name' onChange={this.setFilterValue} size='5' multiple>
-            {console.log('namesList')}
-            <option value='' key='any' > Любое </option>
+        <ul ref='nameList'>
+            <li key='anyname'> <button onClick={this.setFilterNameValue} value=''> Все </button> </li>
             {this.props.events.namesList.map(doc =>
-                <option value={doc.name} key={doc.name}> {doc.name} </option>
+                <li key={doc.name}>
+                    <button onClick={this.setFilterNameValue} value={doc.name}> {doc.name} </button>
+                </li>
             )}
-        </select>;
+        </ul>;
 
+
+    setFilterNameValue = (e) => {
+        const target = e.target;
+
+        this.refs.nameList.childNodes.forEach((el) =>
+            el.firstElementChild.className = styles.inactiveButton
+        );
+        target.className = styles.activeButton;
+
+        if (this.searchFields.name !== target.value) {
+            this.searchFields.name = target.value;
+            this.props.events.setFilterDoctors(this.searchFields);
+            this.props.events.fetchAll();
+        }
+    }
+
+
+    specsList = () => {
+        console.log('specsList');
+        this.specs.length === 0 && this.props.events.selectedDocs.map(doc =>
+            this.specs.indexOf(doc.spec) === -1 && this.specs.push(doc.spec)
+        );
+
+        return (
+            <ul ref='specList' className={styles.headerList}>
+                <li key='any'> <button onClick={this.setFilterSpecValue} value=''> Все специальности </button> </li>
+                {this.specs.map(spec =>
+                    <li key={spec}>
+                        <button onClick={this.setFilterSpecValue} value={spec}> {spec} </button>
+                    </li>
+                )}
+            </ul>
+        );
+    }
+
+    setFilterSpecValue = (e) => {
+        const target = e.target;
+
+        this.refs.specList.childNodes.forEach((el) =>
+            el.firstElementChild.className = styles.inactiveButton
+        );
+        target.className = styles.activeButton;
+        if (this.searchFields.spec !== target.value) {
+            this.searchFields.spec = target.value;
+            this.props.events.setFilterDoctors(this.searchFields);
+            this.props.events.fetchAll();
+        }
+    }
 
 
     selectedDoctor = () =>
@@ -48,22 +99,6 @@ class CalendarHeader extends React.Component {
                 this.props.events.selectedDocs[0].spec : this.searchFields.spec}
             <hr />
         </div>;
-
-    specsList = () => {
-        console.log('specsList');
-        this.specs.length === 0 && this.props.events.selectedDocs.map(doc =>
-            this.specs.indexOf(doc.spec) === -1 && this.specs.push(doc.spec)
-        );
-        return (
-            <select name="doctors" ref='spec' onChange={this.setFilterValue}>
-
-                <option value='' key='any'> Любая </option>
-                {this.specs.map(spec =>
-                    <option value={spec} key={spec}> {spec} </option>
-                )}
-            </select>
-        );
-    }
 
     render() {
         return (
