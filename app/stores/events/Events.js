@@ -29,7 +29,7 @@ class Events {
         this.isLoading = true;
         const response = await Api.get(this.path);
         const status = await response.status;
-        console.log('status,', status);
+        // console.log('status,', status);
         // let doctors = [];
 
         if (status === 200) {
@@ -37,12 +37,12 @@ class Events {
             // this.all = await json.data;
             const doctors = await response.json();
             this.doctors = doctors;
-            console.log('docs from api', doctors);
+            // console.log('docs from api', doctors);
             this.selectedDocs = doctors.slice();
             this.namesList = doctors;
 
 
-            console.log(doctors.map(el => el.name));
+            // console.log(doctors.map(el => el.name));
             if (this.filters.spec !== '') {
                 selectedDocs = selectedDocs.concat(this.doctors
                     .filter(el => el.spec === this.filters.spec));
@@ -67,7 +67,7 @@ class Events {
             //     }
             // });
             // this.freeDoctors.push(selectedDocs);
-            console.log('namesList', this.namesList);
+            // console.log('namesList', this.namesList);
             this.selectedDocs = selectedDocs;
             this.getEvents();
 
@@ -93,7 +93,7 @@ class Events {
 
 
     getEvents = () => {
-        console.log('отфильтрованные доки', this.selectedDocs.slice());
+        // console.log('отфильтрованные доки', this.selectedDocs.slice());
         this.dates = [];
         // if (config.min > config.max) {
         //     throw new Error('Минимальное значение времени начала должно быть меньше времени окончания');
@@ -184,7 +184,7 @@ class Events {
     }
 
     @action async patch(doctorId, data) {
-        console.log('data from patch method', doctorId, data);
+        // console.log('data from patch method', doctorId, data);
         this.isLoading = true;
         const response = await Api.patch(`${this.path}/${doctorId}`, data);
         const status = await response.status;

@@ -32,10 +32,10 @@ class CalendarHeader extends React.Component {
 
     namesList = () =>
         <ul ref='nameList'>
-            <li key='anyname'> <button onClick={this.setFilterNameValue} value=''> Все </button> </li>
+            <li key='anyname'> <button className='pure-button pure-button-primary' onClick={this.setFilterNameValue} value=''> Все </button> </li>
             {this.props.events.namesList.map(doc =>
                 <li key={doc.name}>
-                    <button onClick={this.setFilterNameValue} value={doc.name}> {doc.name} </button>
+                    <button className='pure-button pure-button-secondary' onClick={this.setFilterNameValue} value={doc.name}> {doc.name} </button>
                 </li>
             )}
         </ul>;
@@ -44,10 +44,42 @@ class CalendarHeader extends React.Component {
     setFilterNameValue = (e) => {
         const target = e.target;
 
+
+        // const specList = this.refs.specList.childNodes;
+
+
+        // console.log(this.props.events.selectedDocs[0].spec);
+        // const spec = specList.filter(el => el.children[0].value === this.props.events.selectedDocs[0].spec);
+        // console.log('spec is', spec);
+        // specList.forEach((el) => {
+
+        //     console.log(el.children[0].value);
+        //     console.log(this.props.events.selectedDocs[0].spec);
+        //     console.log(el.children[0].value === this.props.events.selectedDocs[0].spec);
+        //     if (el.children[0].value === this.props.events.selectedDocs[0].spec) {
+        //         el.children[0].className = 'pure-button pure-button-primary';
+        //     } else {
+        //         el.children[0].className = 'pure-button pure-button-secondary';
+        //     }
+        // }
+
+        // );
+
+
         this.refs.nameList.childNodes.forEach((el) =>
-            el.firstElementChild.className = styles.inactiveButton
+            el.firstElementChild.className = 'pure-button pure-button-secondary'
         );
-        target.className = styles.activeButton;
+        target.className = 'pure-button pure-button-primary';
+
+
+        // Ставим активную кномку "Все" если выбраны все врачи
+        if (target.value === '') {
+
+            this.refs.specList.childNodes.forEach(el =>
+                el.children[0].className = 'pure-button pure-button-secondary'
+            );
+            this.refs.specList.childNodes[0].children[0].className = 'pure-button pure-button-primary';
+        }
 
         if (this.searchFields.name !== target.value) {
             this.searchFields.name = target.value;
@@ -58,17 +90,19 @@ class CalendarHeader extends React.Component {
 
 
     specsList = () => {
-        console.log('specsList');
+
+
+        // console.log('Специальность дока', this.searchFields.spec);
         this.specs.length === 0 && this.props.events.selectedDocs.map(doc =>
             this.specs.indexOf(doc.spec) === -1 && this.specs.push(doc.spec)
         );
 
         return (
-            <ul ref='specList' className={styles.headerList}>
-                <li key='any'> <button onClick={this.setFilterSpecValue} value=''> Все специальности </button> </li>
+            <ul ref='specList'>
+                <li key='any'> <button className='pure-button pure-button-primary' onClick={this.setFilterSpecValue} value=''> Все </button> </li>
                 {this.specs.map(spec =>
                     <li key={spec}>
-                        <button onClick={this.setFilterSpecValue} value={spec}> {spec} </button>
+                        <button className='pure-button pure-button-secondary' onClick={this.setFilterSpecValue} value={spec}> {spec} </button>
                     </li>
                 )}
             </ul>
@@ -79,9 +113,9 @@ class CalendarHeader extends React.Component {
         const target = e.target;
 
         this.refs.specList.childNodes.forEach((el) =>
-            el.firstElementChild.className = styles.inactiveButton
+            el.firstElementChild.className = 'pure-button pure-button-secondary'
         );
-        target.className = styles.activeButton;
+        target.className = 'pure-button pure-button-primary';
         if (this.searchFields.spec !== target.value) {
             this.searchFields.spec = target.value;
             this.props.events.setFilterDoctors(this.searchFields);
@@ -89,11 +123,29 @@ class CalendarHeader extends React.Component {
         }
     }
 
+    changeClass = () => {
+        const specList = this.refs.specList.childNodes;
+
+
+        // console.log(this.props.events.selectedDocs[0].spec);
+        // const spec = specList.filter(el => el.children[0].value === this.props.events.selectedDocs[0].spec);
+        // console.log('spec is', spec);
+        specList.forEach((el) => {
+
+            if (el.children[0].value === this.props.events.selectedDocs[0].spec) {
+                el.children[0].className = 'pure-button pure-button-primary';
+            } else {
+                el.children[0].className = 'pure-button pure-button-secondary';
+            }
+        }
+
+        );
+    }
 
     selectedDoctor = () =>
         <div>
             Вы выбрали врача: {this.searchFields.name ?
-                this.searchFields.name : 'Не выбрано'}
+                this.searchFields.name : 'Все врачи'}
             <br />
             Специальность врача: {this.searchFields.name ?
                 this.props.events.selectedDocs[0].spec : this.searchFields.spec}
@@ -102,23 +154,25 @@ class CalendarHeader extends React.Component {
 
     render() {
         return (
-            <div>
-                <fieldset>
+            <div >
+                <fieldset className={styles.mainFieldset}>
                     <legend>Выберете врача</legend>
-                    {this.searchFields.spec !== '' || this.searchFields.name !== '' ?
-                        this.selectedDoctor() : ''}
-                    <div className="pure-u-12-24">
-                        <fieldset>
+
+                    <div className="pure-u-12-24" >
+                        <fieldset className={styles.fieldset}>
                             <legend>Специальность</legend>
                             {this.specsList()}
-                        </fieldset>
+                        </fieldset >
                     </div>
                     <div className="pure-u-12-24">
-                        <fieldset >
+                        <fieldset className={styles.fieldset}>
                             <legend>Имя</legend>
                             {this.namesList()}
                         </fieldset>
                     </div>
+                    {this.searchFields.spec !== '' || this.searchFields.name !== '' ?
+                        this.selectedDoctor() : ''}
+                    {this.searchFields.spec !== '' || this.searchFields.name !== '' ? this.changeClass() : ''}
                 </fieldset>
             </div >
         );

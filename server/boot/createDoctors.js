@@ -4,7 +4,7 @@ moment.locale('ru');
 
 const doctors = [
     {
-        spec: 'sergeon',
+        spec: 'surgeon',
         name: 'Jon',
         working: {
             days: {
@@ -25,7 +25,7 @@ const doctors = [
 
     },
     {
-        spec: 'terapeft',
+        spec: 'therapist',
         name: 'Bob',
         working: {
             days: {
@@ -49,7 +49,7 @@ const doctors = [
         ],
     },
     {
-        spec: 'dantist',
+        spec: 'dentist',
         name: 'Mike',
         working: {
             days: {
@@ -77,7 +77,7 @@ const doctors = [
         ],
     },
     {
-        spec: 'dantist',
+        spec: 'dentist',
         name: 'Ken',
         working: {
             days: {
