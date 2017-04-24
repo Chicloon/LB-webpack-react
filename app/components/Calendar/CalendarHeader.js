@@ -21,7 +21,6 @@ class CalendarHeader extends React.Component {
             )}
         </ul>;
 
-
     setFilterNameValue = (e) => {
         const target = e.target;
 
@@ -32,8 +31,6 @@ class CalendarHeader extends React.Component {
             this.updateButtons(target, '');
         }
     }
-
-
 
     specsList = () => {
         // Заполняем все специализации врачей в отдельный массив, чтобы построить список специальностей
@@ -78,7 +75,7 @@ class CalendarHeader extends React.Component {
     updateButtons = (name, spec) => {
         if (spec) {
             this.searchFields.name = '';
-            // дейлаем кнопку "все"" активной и выключаем остальные
+            // дейлаем кнопку "все" в списке имен активной и выключаем остальные
             this.refs.nameList.childNodes.forEach(el =>
                 el.children[0].className = 'pure-button pure-button-secondary'
             );
