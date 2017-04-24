@@ -7,7 +7,7 @@ import styles from './Layout.sass';
 
 @inject('user') @observer
 class Application extends React.Component {
-  signOut =() => {
+  signOut = () => {
     console.log('user signed out');
     this.props.user.signOut();
   }
@@ -16,13 +16,10 @@ class Application extends React.Component {
     if (this.props.user.signedIn) {
       return (
         <div>
-          <span className={classNames('pure-menu-link', styles.user)}>
-            Hello, {this.props.user.username}
-          </span>
           <Link to="/"
             className={classNames("pure-menu-link", styles.links)}
             onClick={this.signOut}
-            >Sign Out
+          > Sign Out
           </Link>
         </div>
       );
@@ -34,7 +31,6 @@ class Application extends React.Component {
     );
   }
 
-  
   render() {
     return (
       <div id='Layout' className={styles.layout}>
@@ -44,19 +40,14 @@ class Application extends React.Component {
             className={classNames("pure-menu-heading", styles.heading)}>Invoiced</Link>
           <ul className="pure-menu-list">
             <li className="pure-menu-item">
-              {this.checkUser()}
-            </li>
-            <li className="pure-menu-item">
               <Link to="/calendar"
                 className={classNames('pure-menu-heading', styles.headin)}>
                 Calendar
               </Link>
             </li>
+
             <li className="pure-menu-item">
-              <Link to="/test"
-                className={classNames('pure-menu-heading', styles.headin)}>
-                Test
-              </Link>
+              {this.checkUser()}
             </li>
           </ul>
         </div>

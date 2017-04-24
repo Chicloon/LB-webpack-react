@@ -9,7 +9,7 @@ const doctors = [
         working: {
             days: {
                 start: '15/04/10',
-                end: moment(new Date()).format('YY/MM/DD'),
+                end: moment(new Date()).add(4, 'd').format('YY/MM/DD'),
             },
             hours: {
                 start: '10:00',

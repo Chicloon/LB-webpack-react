@@ -109,25 +109,28 @@ class CalendarTable extends React.Component {
         };
 
         const prevButton = () => {
-            if (date < moment().subtract(30, 'd')) {
-                return null;
+
+            if (date < moment()) {
+                return <button className='pure-button pure-button-secondary'>&#8249;</button>;
             }
-            return <button className={['btn-back']} onClick={goToBack}>&#8249;</button>;
+            return <button className='pure-button pure-button-primary' onClick={goToBack}>&#8249;</button>;
         };
 
         const nextButton = () => {
-            if (date > moment().add(30, 'd')) {
-                return null;
+            if (date > moment().add(14, 'd')) {
+                return <button className='pure-button pure-button-secondary'>&#8250;</button>;
             }
-            return <button className={['btn-next']} onClick={goToNext}>&#8250;</button>;
+            return <button className='pure-button pure-button-primary' onClick={goToNext}>&#8250;</button>;
         };
 
         return (
             <div className={['toolbar-container']}>
                 <div className={['back-next-buttons']}>
                     {prevButton()}
-                    <button className={['btn-current']} onClick={goToCurrent}>Сегодня</button>
                     {nextButton()}
+                    <div>
+                        <button className='pure-button pure-button-primary' onClick={goToCurrent}>Сегодня</button>
+                    </div>
                 </div>
             </div >
         );

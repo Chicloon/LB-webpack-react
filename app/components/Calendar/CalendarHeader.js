@@ -11,25 +11,6 @@ class CalendarHeader extends React.Component {
         spec: '',
     }
 
-    // setFilterValue = () => {
-    //     console.log('setFilterValue');
-    //     // this.setState({
-    //     //     specs: (this.refs.name.value !== '') ?
-    //     //         this.props.events.doctors.filter(el => el.name === this.refs.name.value)[0].spec
-    //     //         : this.specs,
-    //     // });
-
-    //     // console.log('specs', specs);
-    //     // console.log('state', this.state.specs);
-    //     this.searchFields = {
-    //         name: (this.refs.spec.value === this.searchFields.spec) ? this.refs.name.value : '',
-    //         spec: this.refs.spec.value,
-    //     };
-
-    //     this.props.events.setFilterDoctors(this.searchFields);
-    //     this.props.events.fetchAll();
-    // }
-
     namesList = () =>
         <ul ref='nameList'>
             <li key='anyname'> <button className='pure-button pure-button-primary' onClick={this.setFilterNameValue} value=''> Все </button> </li>
@@ -44,55 +25,41 @@ class CalendarHeader extends React.Component {
     setFilterNameValue = (e) => {
         const target = e.target;
 
-
-        // const specList = this.refs.specList.childNodes;
-
-
-        // console.log(this.props.events.selectedDocs[0].spec);
-        // const spec = specList.filter(el => el.children[0].value === this.props.events.selectedDocs[0].spec);
-        // console.log('spec is', spec);
-        // specList.forEach((el) => {
-
-        //     console.log(el.children[0].value);
-        //     console.log(this.props.events.selectedDocs[0].spec);
-        //     console.log(el.children[0].value === this.props.events.selectedDocs[0].spec);
-        //     if (el.children[0].value === this.props.events.selectedDocs[0].spec) {
-        //         el.children[0].className = 'pure-button pure-button-primary';
-        //     } else {
-        //         el.children[0].className = 'pure-button pure-button-secondary';
-        //     }
-        // }
-
-        // );
-
-
-        this.refs.nameList.childNodes.forEach((el) =>
-            el.firstElementChild.className = 'pure-button pure-button-secondary'
-        );
-        target.className = 'pure-button pure-button-primary';
-
-
-        // Ставим активную кномку "Все" если выбраны все врачи
-        if (target.value === '') {
-
-            this.refs.specList.childNodes.forEach(el =>
-                el.children[0].className = 'pure-button pure-button-secondary'
-            );
-            this.refs.specList.childNodes[0].children[0].className = 'pure-button pure-button-primary';
-        }
-
         if (this.searchFields.name !== target.value) {
             this.searchFields.name = target.value;
             this.props.events.setFilterDoctors(this.searchFields);
             this.props.events.fetchAll();
+            this.updateButtons(target, '');
         }
     }
 
+    // Меняем классы кнопок в зависимости от действия пользователя
+    updateButtons = (name, spec) => {
+        if (spec) {
+            this.searchFields.name = '';
+            // дейлаем кнопку "все"" активной и выключаем остальные
+            this.refs.nameList.childNodes.forEach(el =>
+                el.children[0].className = 'pure-button pure-button-secondary'
+            );
+            this.refs.nameList.childNodes[0].children[0].className = 'pure-button pure-button-primary';
+
+            // включаем текущую кнопку специальности, выключаем остальные
+            this.refs.specList.childNodes.forEach((el) =>
+                el.firstElementChild.className = 'pure-button pure-button-secondary'
+            );
+            spec.className = 'pure-button pure-button-primary';
+        }
+
+        if (name) {
+            // включаем активное имя вкача, выключаем остальные
+            this.refs.nameList.childNodes.forEach((el) =>
+                el.firstElementChild.className = 'pure-button pure-button-secondary'
+            );
+            name.className = 'pure-button pure-button-primary';
+        }
+    }
 
     specsList = () => {
-
-
-        // console.log('Специальность дока', this.searchFields.spec);
         this.specs.length === 0 && this.props.events.selectedDocs.map(doc =>
             this.specs.indexOf(doc.spec) === -1 && this.specs.push(doc.spec)
         );
@@ -112,44 +79,22 @@ class CalendarHeader extends React.Component {
     setFilterSpecValue = (e) => {
         const target = e.target;
 
-        this.refs.specList.childNodes.forEach((el) =>
-            el.firstElementChild.className = 'pure-button pure-button-secondary'
-        );
-        target.className = 'pure-button pure-button-primary';
         if (this.searchFields.spec !== target.value) {
             this.searchFields.spec = target.value;
             this.props.events.setFilterDoctors(this.searchFields);
             this.props.events.fetchAll();
+            this.updateButtons('', target);
         }
     }
 
-    changeClass = () => {
-        const specList = this.refs.specList.childNodes;
-
-
-        // console.log(this.props.events.selectedDocs[0].spec);
-        // const spec = specList.filter(el => el.children[0].value === this.props.events.selectedDocs[0].spec);
-        // console.log('spec is', spec);
-        specList.forEach((el) => {
-
-            if (el.children[0].value === this.props.events.selectedDocs[0].spec) {
-                el.children[0].className = 'pure-button pure-button-primary';
-            } else {
-                el.children[0].className = 'pure-button pure-button-secondary';
-            }
-        }
-
-        );
-    }
 
     selectedDoctor = () =>
         <div>
             Вы выбрали врача: {this.searchFields.name ?
-                this.searchFields.name : 'Все врачи'}
+                this.searchFields.name : 'Не выбранно'}
             <br />
             Специальность врача: {this.searchFields.name ?
-                this.props.events.selectedDocs[0].spec : this.searchFields.spec}
-            <hr />
+                this.props.events.selectedDocs[0].spec : this.searchFields.spec}            
         </div>;
 
     render() {
@@ -172,7 +117,6 @@ class CalendarHeader extends React.Component {
                     </div>
                     {this.searchFields.spec !== '' || this.searchFields.name !== '' ?
                         this.selectedDoctor() : ''}
-                    {this.searchFields.spec !== '' || this.searchFields.name !== '' ? this.changeClass() : ''}
                 </fieldset>
             </div >
         );
