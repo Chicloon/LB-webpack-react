@@ -6,45 +6,49 @@ import config from '../../components/Calendar/calendarConfig';
 
 
 class Events {
+    // Путь для API
     path = '/Doctors';
-    @observable doctors = [];
+    // значение загрузки для отображения спиннера
+    @observable isLoading = false;
+    // все даты для наполнения календаря
     @observable dates = [];
+    // фильтры для списка докторов
     filters = {
         name: '',
         spec: '',
     };
-    @observable isLoading = false;
+    // список докторов для отображения в календаре
     @observable selectedDocs = [];
+    // список всех имен докторов для отображения списка во вьюхе
     @observable namesList = [];
 
     /**
-     * функция возвращает массив докторов отфильтрованные по специальности
-     * 
-     * @param {Array} doctors - массив докоторов
-     * @param {string} spec - специлальность доктора по которой надо отфильтровать
+     * Заполняем все события в календаре совбодными врачами исходя из параметров filters
+     * filters приходят из вьюхи
      */
     @action async fetchAll() {
         let selectedDocs = [];
 
+        // получаем массив объектов доков от БД
         this.isLoading = true;
         const response = await Api.get(this.path);
         const status = await response.status;
         // console.log('status,', status);
         // let doctors = [];
 
+        // Если упешно фильтруем докторов исходя из значений фитра
         if (status === 200) {
-            // const json = await response.json();
-            // this.all = await json.data;
+
+            // задаем значения для отображения вьюхи
             const doctors = await response.json();
-            this.doctors = doctors;
-            // console.log('docs from api', doctors);
-            this.selectedDocs = doctors.slice();
+
+            // задаем имена всех докторов для вьюхи
             this.namesList = doctors;
 
 
             // console.log(doctors.map(el => el.name));
             if (this.filters.spec !== '') {
-                selectedDocs = selectedDocs.concat(this.doctors
+                selectedDocs = selectedDocs.concat(doctors
                     .filter(el => el.spec === this.filters.spec));
                 this.namesList = selectedDocs.slice();
             } else {
@@ -55,56 +59,28 @@ class Events {
             if (this.filters.name !== '') {
                 selectedDocs = doctors
                     .filter(el => el.name === this.filters.name);
-            } else {
-                // this.namesList = this.doctors;
             }
-            // selectedDocs = this.filters;
-            // console.log('docs from filter', docs);
-            // docs.forEach(el => {
-            //     if (el.working.days.start <= moment(config.startDate, 'YY/MM/DD HH:mm').format('YY/MM/DD') ||
-            //         el.working.days.end >= moment(config.endDate, 'YY/MM/DD HH:mm').format('YY/MM/DD')) {
-            //         selectedDocs.push(el);
-            //     }
-            // });
-            // this.freeDoctors.push(selectedDocs);
-            // console.log('namesList', this.namesList);
-            this.selectedDocs = selectedDocs;
-            this.getEvents();
 
-            // return selectedDocs;
+            // предаем отфильтрованных докторов классу
+            this.selectedDocs = selectedDocs;
+            // получаем массив событий календаря для построения во вьюхе
+            this.getEvents();
         }
     }
 
+    // устанавливам значения фильтров из вьюхи
     setFilterDoctors = (filter) => {
         this.filters = filter;
-        // this.getFilterDoctors();
     }
 
     /**
-     * функция выдает массив объектов событий исходя из массива объекта докторов
-     * 
-     * @param {moment().format('HH:mm')} min значения времени в пределах которых идет обработка данных и формируется массив событий
-     * @param {moment().format('HH:mm')} max значения времени в пределах которых идет обработка данных и формируется массив событий
-     * @param {moment().format('YY/MM/DD HH:mm')} startDate дата начала  обработки данных
-     * @param {moment().format('YY/MM/DD HH:mm')} endDate дата окончания обработки данных
-     * @param {Array} doctors массив всех докторов
-     * @param {spring} spec специальность доктора
+     * функция создания массива событий календаря для формирования во вьюхе
      */
 
 
     getEvents = () => {
-        // console.log('отфильтрованные доки', this.selectedDocs.slice());
         this.dates = [];
-        // if (config.min > config.max) {
-        //     throw new Error('Минимальное значение времени начала должно быть меньше времени окончания');
-        // }
-
-        // if (config.startDate > config.endDate) {
-        //     throw new Error('Начальная дата должна быть мольше конечной');
-        // }
-
         const selectedDocs = this.selectedDocs;
-
         const newDate = {
             title: 'Blank',
             start: config.startDate,
@@ -175,30 +151,29 @@ class Events {
         while (!over);
     };
 
+
+    /**
+     * Добавляем запись в докроту что он занят в это время когда зациент записывается
+     * docName - имя врача к которому записались
+     * busyDates - время на которое записались
+     */
     @action addNew = (docName, busyDates) => {
-        this.doctors.forEach(el => {
+        this.selectedDocs.forEach(el => {
             if (el.name === docName) {
                 this.patch(el.id, { busy: el.busy.concat(busyDates) });
             }
         });
     }
 
+    // функция записи изменений в БД
     @action async patch(doctorId, data) {
-        // console.log('data from patch method', doctorId, data);
         this.isLoading = true;
         const response = await Api.patch(`${this.path}/${doctorId}`, data);
         const status = await response.status;
 
         if (status === 200) {
-            // this.isLoading = false;
             this.fetchAll();
         }
-    }
-
-    @action getDocs = (docName, docSpec) => {
-        const name = this.doctors.filter(doc => doc.name === docName);
-        const specialty = this.doctors.filter(doc => doc.spec === docSpec);
-        return { name, specialty, };
     }
 }
 

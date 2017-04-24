@@ -33,33 +33,10 @@ class CalendarHeader extends React.Component {
         }
     }
 
-    // Меняем классы кнопок в зависимости от действия пользователя
-    updateButtons = (name, spec) => {
-        if (spec) {
-            this.searchFields.name = '';
-            // дейлаем кнопку "все"" активной и выключаем остальные
-            this.refs.nameList.childNodes.forEach(el =>
-                el.children[0].className = 'pure-button pure-button-secondary'
-            );
-            this.refs.nameList.childNodes[0].children[0].className = 'pure-button pure-button-primary';
 
-            // включаем текущую кнопку специальности, выключаем остальные
-            this.refs.specList.childNodes.forEach((el) =>
-                el.firstElementChild.className = 'pure-button pure-button-secondary'
-            );
-            spec.className = 'pure-button pure-button-primary';
-        }
-
-        if (name) {
-            // включаем активное имя вкача, выключаем остальные
-            this.refs.nameList.childNodes.forEach((el) =>
-                el.firstElementChild.className = 'pure-button pure-button-secondary'
-            );
-            name.className = 'pure-button pure-button-primary';
-        }
-    }
 
     specsList = () => {
+        // Заполняем все специализации врачей в отдельный массив, чтобы построить список специальностей
         this.specs.length === 0 && this.props.events.selectedDocs.map(doc =>
             this.specs.indexOf(doc.spec) === -1 && this.specs.push(doc.spec)
         );
@@ -87,7 +64,7 @@ class CalendarHeader extends React.Component {
         }
     }
 
-
+    // Выводим выбранного врача и его специализацию
     selectedDoctor = () =>
         <div>
             Вы выбрали врача: {this.searchFields.name ?
@@ -96,6 +73,32 @@ class CalendarHeader extends React.Component {
             Специальность врача: {this.searchFields.name ?
                 this.props.events.selectedDocs[0].spec : this.searchFields.spec}            
         </div>;
+
+    // Меняем классы кнопок в зависимости от действия пользователя
+    updateButtons = (name, spec) => {
+        if (spec) {
+            this.searchFields.name = '';
+            // дейлаем кнопку "все"" активной и выключаем остальные
+            this.refs.nameList.childNodes.forEach(el =>
+                el.children[0].className = 'pure-button pure-button-secondary'
+            );
+            this.refs.nameList.childNodes[0].children[0].className = 'pure-button pure-button-primary';
+
+            // включаем текущую кнопку специальности, выключаем остальные
+            this.refs.specList.childNodes.forEach((el) =>
+                el.firstElementChild.className = 'pure-button pure-button-secondary'
+            );
+            spec.className = 'pure-button pure-button-primary';
+        }
+
+        if (name) {
+            // включаем активное имя вкача, выключаем остальные
+            this.refs.nameList.childNodes.forEach((el) =>
+                el.firstElementChild.className = 'pure-button pure-button-secondary'
+            );
+            name.className = 'pure-button pure-button-primary';
+        }
+    }
 
     render() {
         return (
