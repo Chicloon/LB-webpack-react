@@ -111,14 +111,14 @@ class CalendarTable extends React.Component {
         const prevButton = () => {
 
             if (date < moment()) {
-                return <button className='pure-button pure-button-secondary'>&#8249;</button>;
+                return <button className={`${styles.navButton} pure-button pure-button-disabled`}>&#8249;</button>;
             }
-            return <button className='pure-button pure-button-primary' onClick={goToBack}>&#8249;</button>;
+            return <button className={`${styles.navButton} pure-button pure-button-primary`} onClick={goToBack}>&#8249;</button>;
         };
 
         const nextButton = () => {
             if (date > moment().add(14, 'd')) {
-                return <button className='pure-button pure-button-secondary'>&#8250;</button>;
+                return <button className='pure-button pure-button-disabled'>&#8250;</button>;
             }
             return <button className='pure-button pure-button-primary' onClick={goToNext}>&#8250;</button>;
         };
@@ -129,7 +129,7 @@ class CalendarTable extends React.Component {
                     {prevButton()}
                     {nextButton()}
                     <div>
-                        <button className='pure-button pure-button-primary' onClick={goToCurrent}>Сегодня</button>
+                        <button className={`${styles.todayNavButton} pure-button pure-button-primary`} onClick={goToCurrent}>Сегодня</button>
                     </div>
                 </div>
             </div >
