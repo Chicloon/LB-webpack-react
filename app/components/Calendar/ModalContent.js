@@ -11,7 +11,7 @@ import styles from './Calendar.sass';
 // const endDate = moment(startDate).add(1, 'months').toDate();
 
 
-@observer(['events'])
+@observer(['doctors'])
 class ModalContent extends React.Component {
     componentWillMount() {
         this.setState({ showModal: false });
@@ -19,11 +19,11 @@ class ModalContent extends React.Component {
 
 
     addNewEvent = (e) => {
-        console.log('doctors', this.props.events.doctors);
+        console.log('doctors', this.props.doctors.doctors);
         e.preventDefault();
         console.log(this.refs.doctor.value);
         // this.props.events.fetchAll();
-        this.props.events.addNew(this.refs.doctor.value, this.props.info.dates);
+        this.props.doctors.addNew(this.refs.doctor.value, this.props.info.dates);
 
         this.props.close();
     }

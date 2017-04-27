@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 
 import styles from './Calendar.sass';
 
-@observer(['events'])
+@observer(['doctors'])
 class CalendarHeader extends React.Component {
     specs = [];
     searchFields = {
@@ -13,9 +13,9 @@ class CalendarHeader extends React.Component {
 
     namesList = () =>
         <ul ref='nameList'>
-            <li key='anyname'> <button className='pure-button pure-button-primary' onClick={this.setFilterNameValue} value=''> Все </button> </li>
-            {this.props.events.namesList.map(doc =>
-                <li key={doc.name}>
+            <li key='anyname' className={styles.headerListItem}> <button className='pure-button pure-button-primary' onClick={this.setFilterNameValue} value=''> Все </button> </li>
+            {this.props.doctors.namesList.map(doc =>
+                <li key={doc.name} className={styles.headerListItem}>
                     <button className='pure-button pure-button-secondary' onClick={this.setFilterNameValue} value={doc.name}> {doc.name} </button>
                 </li>
             )}
@@ -26,23 +26,23 @@ class CalendarHeader extends React.Component {
 
         if (this.searchFields.name !== target.value) {
             this.searchFields.name = target.value;
-            this.props.events.setFilterDoctors(this.searchFields);
-            this.props.events.fetchAll();
+            this.props.doctors.setFilterDoctors(this.searchFields);
+            this.props.doctors.fetchAll();
             this.updateButtons(target, '');
         }
     }
 
     specsList = () => {
         // Заполняем все специализации врачей в отдельный массив, чтобы построить список специальностей
-        this.specs.length === 0 && this.props.events.selectedDocs.map(doc =>
+        this.specs.length === 0 && this.props.doctors.selectedDocs.map(doc =>
             this.specs.indexOf(doc.spec) === -1 && this.specs.push(doc.spec)
         );
 
         return (
             <ul ref='specList'>
-                <li key='any'> <button className='pure-button pure-button-primary' onClick={this.setFilterSpecValue} value=''> Все </button> </li>
+                <li key='any' className={styles.headerListItem}> <button className='pure-button pure-button-primary' onClick={this.setFilterSpecValue} value=''> Все </button> </li>
                 {this.specs.map(spec =>
-                    <li key={spec}>
+                    <li key={spec} className={styles.headerListItem}>
                         <button className='pure-button pure-button-secondary' onClick={this.setFilterSpecValue} value={spec}> {spec} </button>
                     </li>
                 )}
@@ -55,8 +55,8 @@ class CalendarHeader extends React.Component {
 
         if (this.searchFields.spec !== target.value) {
             this.searchFields.spec = target.value;
-            this.props.events.setFilterDoctors(this.searchFields);
-            this.props.events.fetchAll();
+            this.props.doctors.setFilterDoctors(this.searchFields);
+            this.props.doctors.fetchAll();
             this.updateButtons('', target);
         }
     }
@@ -68,7 +68,7 @@ class CalendarHeader extends React.Component {
                 this.searchFields.name : 'Не выбранно'}
             <br />
             Специальность врача: {this.searchFields.name ?
-                this.props.events.selectedDocs[0].spec : this.searchFields.spec}            
+                this.doctors.events.selectedDocs[0].spec : this.searchFields.spec}            
         </div>;
 
     // Меняем классы кнопок в зависимости от действия пользователя

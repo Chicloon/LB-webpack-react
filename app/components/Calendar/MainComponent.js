@@ -6,10 +6,10 @@ import CalendarHeader from './CalendarHeader';
 
 import styles from './Calendar.sass';
 
-@observer(['events'])
+@observer(['doctors'])
 class Calendar extends React.Component {
     componentWillMount() {
-        this.props.events.fetchAll();
+        this.props.doctors.fetchAll();
     }
 
     render() {

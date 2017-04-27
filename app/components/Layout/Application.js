@@ -16,10 +16,11 @@ class Application extends React.Component {
     if (this.props.user.signedIn) {
       return (
         <div>
+           
           <Link to="/"
             className={classNames("pure-menu-link", styles.links)}
             onClick={this.signOut}
-          > Sign Out
+          > {this.props.user.username}, <b>Sign Out</b>
           </Link>
         </div>
       );
@@ -37,12 +38,14 @@ class Application extends React.Component {
         <div
           className={classNames("pure-menu pure-menu-horizontal pure-menu-fixed", styles.mainNav)}>
           <Link to="/"
-            className={classNames("pure-menu-heading", styles.heading)}>Invoiced</Link>
+            className={classNames("pure-menu-heading", styles.heading)}>Index</Link>
+            <Link to="/doctors"
+            className={classNames("pure-menu-heading", styles.heading)}>Врачи</Link>
           <ul className="pure-menu-list">
             <li className="pure-menu-item">
               <Link to="/calendar"
                 className={classNames('pure-menu-heading', styles.headin)}>
-                Calendar
+                Записаться
               </Link>
             </li>
 

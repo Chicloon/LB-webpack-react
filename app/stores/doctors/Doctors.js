@@ -5,7 +5,7 @@ import Api from 'helpers/api';
 import config from '../../components/Calendar/calendarConfig';
 
 
-class Events {
+class Doctors {
     // Путь для API
     path = '/Doctors';
     // значение загрузки для отображения спиннера
@@ -177,4 +177,4 @@ class Events {
     }
 }
 
-export default new Events();
+export default new Doctors();

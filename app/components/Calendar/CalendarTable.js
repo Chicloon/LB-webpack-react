@@ -17,7 +17,7 @@ moment.locale('ru');
 BigCalendar.momentLocalizer(moment); // or globalizeLocalizer
 
 
-@observer(['events'])
+@observer(['doctors'])
 class CalendarTable extends React.Component {
 
     componentWillMount() {
@@ -219,7 +219,7 @@ class CalendarTable extends React.Component {
     }
 
     render() {
-        if (this.props.events.isLoading) {
+        if (this.props.doctors.isLoading) {
             return <Spinner />;
         }
 
@@ -237,7 +237,7 @@ class CalendarTable extends React.Component {
                 </Modal>
                 <BigCalendar
                     onSelectEvent={this.onSelect}
-                    events={this.props.events.dates.slice()}
+                    events={this.props.doctors.dates.slice()}
                     views={['week']}
                     min={moment(config.min, 'HH:mm').toDate()}
                     max={moment(config.max, 'HH:mm').toDate()}

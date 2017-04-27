@@ -1,11 +1,11 @@
 import contacts from './collections/Contacts';
-import events from './events/Events';
+import doctors from './doctors/Doctors';
 import user from './models/User';
 
 const stores = {
   contacts,
   user,
-  events,
+  doctors,
 };
 
 export default stores;
