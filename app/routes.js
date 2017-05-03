@@ -7,7 +7,7 @@ import {
 } from 'react-router';
 
 import c from './components';
-console.log(c);
+// console.log(c);
 
 const routes =
   <Route component={c.Layout.Application}>

@@ -4,19 +4,29 @@
     "connector": "memory"
   },
   "mongoDs": {
-    "host": "localhost",
-    "port": 27017,
-    "url": "",
-    "database": "loopback",
-    "password": "",
-    "name": "mongoDs",
-    "user": "",
-    "connector": "mongodb"
+      "host": "localhost",
+      "port": 27017,
+      "url": "",
+      "database": "loopback",
+      "password": "",
+      "name": "mongoDs",
+      "user": "",
+      "connector": "mongodb"
   },
   "_commnets": {
-    "remote" : {
-    "url": "mongodb://user:user@ds119370.mlab.com:19370/chicloon",
-    "connector": "mongodb"
+    "local": {
+      "host": "localhost",
+      "port": 27017,
+      "url": "",
+      "database": "loopback",
+      "password": "",
+      "name": "mongoDs",
+      "user": "",
+      "connector": "mongodb"
+    },
+    "remote": {
+      "url": "mongodb://user:user@ds119370.mlab.com:19370/chicloon",
+      "connector": "mongodb"
     }
   }
 }

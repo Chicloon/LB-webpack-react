@@ -1,6 +1,8 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import Spinner from 'components/Spinner';
+import DoctorDetails from './DoctorDetails';
+
 
 import styles from './Doctors.sass';
 
@@ -8,12 +10,6 @@ import styles from './Doctors.sass';
 class Doctors extends React.Component {
     componentWillMount() {
         this.props.doctors.fetchAll();
-    }
-
-    detailInfo(e) {
-        // e.preventDefault();
-        console.log('click');
-        console.log(e);
     }
 
     render() {
@@ -25,18 +21,8 @@ class Doctors extends React.Component {
 
         return (
             <div className={styles.main}>
-                <p> Наши доктора: </p>
-                <ul>
-                    {selectedDocs.map(el =>
-                        <li key={el.name}>
-                            <button onClick={this.detailInfo(el.id)}>
-                                {el.name}
-                            </button>
-                        </li>
-                    )}
-
-                </ul>
-                the Doctors will go here
+                <h2> Наши доктора </h2>
+                {selectedDocs.map(el => <DoctorDetails key={el.id} doctor={el} />)}
             </div>
         );
     }

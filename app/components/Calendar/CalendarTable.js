@@ -19,6 +19,7 @@ BigCalendar.momentLocalizer(moment); // or globalizeLocalizer
 
 @observer(['doctors'])
 class CalendarTable extends React.Component {
+    defaultDate = new Date();
 
     componentWillMount() {
         this.setState({ showModal: false });
@@ -93,23 +94,26 @@ class CalendarTable extends React.Component {
         const date = moment(toolbar.date);
 
         const goToBack = () => {
-            toolbar.date.setDate(toolbar.date.getDate() - 7);
+            const currentDate = new Date(toolbar.date.setDate(toolbar.date.getDate() - 7));
+            this.defaultDate = currentDate;
             toolbar.onNavigate('prev');
         };
 
         const goToNext = () => {
-            toolbar.date.setDate(toolbar.date.getDate() + 7);
+            const currentDate = new Date(toolbar.date.setDate(toolbar.date.getDate() + 7));
+            this.defaultDate = currentDate;
             toolbar.onNavigate('next');
         };
 
         const goToCurrent = () => {
             const now = moment();
-            toolbar.date.setFullYear(now.format('YYYY'), now.format('MM') - 1, now.format('DD'));
+            const currentDate = new Date(toolbar.date.setFullYear(now.format('YYYY'), now.format('MM') - 1, now.format('DD')));
+            this.defaultDate = currentDate;
+            // toolbar.date.setFullYear(now.format('YYYY'), now.format('MM') - 1, now.format('DD'));
             toolbar.onNavigate('current');
         };
 
         const prevButton = () => {
-
             if (date < moment()) {
                 return <button className={`${styles.navButton} pure-button pure-button-disabled`}>&#8249;</button>;
             }
@@ -118,20 +122,23 @@ class CalendarTable extends React.Component {
 
         const nextButton = () => {
             if (date > moment().add(14, 'd')) {
-                return <button className='pure-button pure-button-disabled'>&#8250;</button>;
+                return <button className={`${styles.navButton} pure-button pure-button-disabled`}>&#8250;</button>;
             }
-            return <button className='pure-button pure-button-primary' onClick={goToNext}>&#8250;</button>;
+            return <button className={`${styles.navButton} pure-button pure-button-primary`} onClick={goToNext}>&#8250;</button>;
         };
 
+        const selectedDate = moment(this.defaultDate).format('MM/dd');
+        console.log(selectedDate);
         return (
-            <div className={['toolbar-container']}>
-                <div className={['back-next-buttons']}>
+            <div className={styles.toolbarContainer}>
+                <div>
                     {prevButton()}
                     {nextButton()}
-                    <div>
-                        <button className={`${styles.todayNavButton} pure-button pure-button-primary`} onClick={goToCurrent}>Сегодня</button>
-                    </div>
+                    <button className={`${styles.todayNavButton} pure-button pure-button-primary`} onClick={goToCurrent}>Сегодня</button>
+                    {/*<span className={styles.toolbarDate}> Выбарна дата: {selectedDate} </span>*/}
+                    
                 </div>
+
             </div >
         );
     };
@@ -241,7 +248,7 @@ class CalendarTable extends React.Component {
                     views={['week']}
                     min={moment(config.min, 'HH:mm').toDate()}
                     max={moment(config.max, 'HH:mm').toDate()}
-                    defaultDate={new Date()}
+                    defaultDate={this.defaultDate}
                     defaultView='week'
                     formats={config.formats}
                     onNavigate={this.eventNavigate}

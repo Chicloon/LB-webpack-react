@@ -15,7 +15,7 @@
     "react"
   ],
   "rules": {
-    "linebreak-style": ["error", "windows"],
+    "linebreak-style": 0,
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error",
     "indent": 0,

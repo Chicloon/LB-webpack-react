@@ -6,9 +6,14 @@ import styles from './Calendar.sass';
 @observer(['doctors'])
 class CalendarHeader extends React.Component {
     specs = [];
-    searchFields = {
-        name: '',
-        spec: '',
+    searchFields = {};
+
+    componentWillMount() {
+        this.searchFields = this.props.doctors.filters;
+    }
+
+    componentWillUnmount() {
+        this.props.doctors.setFilterDoctors({ name: '', spec: '' });
     }
 
     namesList = () =>
@@ -53,7 +58,7 @@ class CalendarHeader extends React.Component {
     setFilterSpecValue = (e) => {
         const target = e.target;
 
-        if (this.searchFields.spec !== target.value) {
+        if (this.searchFields.spec !== target.value || this.searchFields.spec === '') {
             this.searchFields.spec = target.value;
             this.props.doctors.setFilterDoctors(this.searchFields);
             this.props.doctors.fetchAll();
@@ -68,7 +73,7 @@ class CalendarHeader extends React.Component {
                 this.searchFields.name : 'Не выбранно'}
             <br />
             Специальность врача: {this.searchFields.name ?
-                this.doctors.events.selectedDocs[0].spec : this.searchFields.spec}            
+                this.props.doctors.selectedDocs[0].spec : this.searchFields.spec}
         </div>;
 
     // Меняем классы кнопок в зависимости от действия пользователя
