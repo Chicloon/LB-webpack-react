@@ -38,13 +38,13 @@ class Application extends React.Component {
         <div
           className={classNames("pure-menu pure-menu-horizontal pure-menu-fixed", styles.mainNav)}>
           <Link to="/"
-            className={classNames("pure-menu-heading", styles.heading)}>Index</Link>
+            className={classNames("pure-menu-heading", styles.heading)}>Главная</Link>
             <Link to="/doctors"
             className={classNames("pure-menu-heading", styles.heading)}>Врачи</Link>
           <ul className="pure-menu-list">
             <li className="pure-menu-item">
               <Link to="/calendar"
-                className={classNames('pure-menu-heading', styles.headin)}>
+                className={classNames('pure-menu-heading', styles.heading)}>
                 Записаться
               </Link>
             </li>
