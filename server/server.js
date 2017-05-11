@@ -2,6 +2,7 @@
 
 var loopback = require('loopback');
 var boot = require('loopback-boot');
+var io = require('socket.io');
 
 var app = module.exports = loopback();
 
@@ -26,19 +27,19 @@ boot(app, __dirname, function (err) {
   // start the server if `$ node server.js`
   if (require.main === module) {
     // app.start();
-    var io = require('socket.io');
-    var socket = io.listen(8080, { /* options */ });
+    
+    // var socket = io.listen(8080, { /* options */ });
     app.io = io(app.start());
-    // app.io.listen(8080, { /* options */ });
+    // app.io.listen(3000, { /* options */ });
     app.io.on('connection', function (socket) {
       console.log('a user connected');
       socket.on('chat message', function (msg) {
-        console.log('message: ' + msg);
-        // app.io.emit('chat message', msg);
+        console.log('got data from client: ' + msg);
+        app.io.emit('chat message', 'msg');
       });
-      // socket.on('disconnect', function () {
-      //   console.log('user disconnected');
-      // });
+      socket.on('disconnect', function () {
+        console.log('user disconnected');
+      });
     });
   }
 });

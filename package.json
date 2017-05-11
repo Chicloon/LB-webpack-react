@@ -72,6 +72,7 @@
     "react-modal": "^1.7.3",
     "react-router": "^2.8.1",
     "serve-favicon": "^2.0.1",
+    "socket.io": "^2.0.1",
     "strong-error-handler": "^1.0.1"
   }
 }

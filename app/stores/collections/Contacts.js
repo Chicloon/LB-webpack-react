@@ -13,6 +13,14 @@ import Api from 'helpers/api';
 //   console.log('the data is', data); // the change object
 // });
 
+  const socket = io.connect('http://localhost:3000/');
+
+socket.on('chat message', (data) => {
+  console.log('got data from server: ', data);
+});
+
+
+
 class Contacts {
   path = '/Contacts';
   @observable all = [];
@@ -25,27 +33,29 @@ class Contacts {
   //   this.data.name = data.target;
   //   console.log('the data is', data); // the change object
   // });
-  
+
   // this.src.addEventListener('data', function (msg) {
   //     var data = JSON.parse(msg.data);
   //     console.log('the data is', data); // the change object
   //   });
+  socket = io.connect('http://localhost:3000/');
 
   @action async fetchAll() {
     this.isLoading = true;
     const response = await Api.get(this.path);
     const status = await response.status;
-    const socket = io();
-    
-    socket.emit('chat message', 'test message');
+
+    // Настройка сокетов для коннекта на API-сервер
+
 
     if (status === 200) {
+      this.socket.emit('chat message', 'test message');
       // const json = await response.json();
       // this.all = await json.data;
       this.all = await response.json();
       this.isLoading = false;
     }
-     
+
   }
 
   @action async add(data) {
