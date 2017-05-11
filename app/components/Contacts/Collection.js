@@ -54,6 +54,7 @@ class Layout extends React.Component {
     return (
       <div id='Collection' className={styles.main}>
         {this.newContact()}
+          <h2> Data: {this.props.contacts.data.name} </h2>
         <div className='pure-g'>
           {all.slice().map(info =>
             <Contact key={info.id} {...info} />

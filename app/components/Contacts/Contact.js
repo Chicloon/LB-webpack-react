@@ -17,6 +17,15 @@ class Contact extends React.Component {
   }
 
   render() {
+    // var urlToChangeStream = 'http://localhost:3000/api/Contacts/change-stream?_format=event-stream';
+    // var src = new EventSource(urlToChangeStream);
+    // src.onmessage = function (e) {
+    //   console.log("Пришли данные: " + e.data);
+    // };
+    // src.addEventListener('data', function (msg) {
+    //   var data = JSON.parse(msg.data);
+    //   console.log('the data is', data); // the change object
+    // });
     return (
       <div className={`${styles.contact} pure-u-1-3`}>
         <h2>

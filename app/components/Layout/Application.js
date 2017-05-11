@@ -41,6 +41,8 @@ class Application extends React.Component {
             className={classNames("pure-menu-heading", styles.heading)}>Главная</Link>
             <Link to="/doctors"
             className={classNames("pure-menu-heading", styles.heading)}>Врачи</Link>
+              <Link to="/contacts"
+            className={classNames("pure-menu-heading", styles.heading)}>Contacts</Link>
           <ul className="pure-menu-list">
             <li className="pure-menu-item">
               <Link to="/calendar"
