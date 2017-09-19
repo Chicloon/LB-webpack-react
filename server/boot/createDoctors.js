@@ -106,15 +106,15 @@ const doctors = [
     },
 ];
 
-module.exports = (app) => {
-    app.dataSources.mongoDs.automigrate('Doctors', (err) => {
-        if (err) throw err;
+// module.exports = (app) => {
+//     app.dataSources.mongoDs.automigrate('Doctors', (err) => {
+//         if (err) throw err;
 
-        app.models.Doctors.create(
-            doctors, (err, doctorsCreated) => {
-                if (err) throw err;
+//         app.models.Doctors.create(
+//             doctors, (err, doctorsCreated) => {
+//                 if (err) throw err;
 
-                console.log('Models created: \n', doctorsCreated);
-            });
-    });
-};
+//                 console.log('Models created: \n', doctorsCreated);
+//             });
+//     });
+// };

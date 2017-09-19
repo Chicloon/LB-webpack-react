@@ -4,8 +4,14 @@
     "connector": "memory"
   },
   "mongoDs": {
-    "url": "mongodb://user:user@ds119370.mlab.com:19370/chicloon",
-      "connector": "mongodb"
+    "host": "localhost",
+    "port": 27017,
+    "url": "",
+    "database": "loopback",
+    "password": "",
+    "name": "mongoDs",
+    "user": "",
+    "connector": "mongodb"
   },
   "_commnets": {
     "local": {
