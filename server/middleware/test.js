@@ -3,11 +3,11 @@ const app = require('../server');
 module.exports = {
   first: async () => {
     const docs = await app.models.Doctors.find();
-    console.log('docs from await', docs);
+    // console.log('docs from await', docs);
 
-    app.models.Contacts.count((error, count) => {
-      console.log(count);
-    });
+    // app.models.Contacts.count((error, count) => {
+    //   console.log(count);
+    // });
     // app.dataSources.mongoDs.automigrate('Doctors', (err) => {
     //   if (err) throw err;
 
