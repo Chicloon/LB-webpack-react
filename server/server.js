@@ -14,6 +14,7 @@ import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { execute, subscribe } from 'graphql';
 
 var app = module.exports = loopback();
+// export default app as loopback()
 
 import typeDefs from './graphql/schema';
 import resolvers from './graphql/resolvers';
@@ -59,7 +60,9 @@ boot(app, __dirname, function (err) {
 app.use('/graphql', bodyParser.json(),
   graphqlExpress(req => ({
     schema,
-    context: req
+    context: {
+
+    },
   })),
 );
 

@@ -32,11 +32,11 @@
     "dataSource": "db",
     "public": false
   },
-  "Contacts": {
+  "Message": {
     "dataSource": "mongoDs",
     "public": true
   },
-  "Doctors": {
+  "Chat": {
     "dataSource": "mongoDs",
     "public": true
   }

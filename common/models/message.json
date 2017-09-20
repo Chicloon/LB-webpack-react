@@ -1,0 +1,41 @@
+{
+  "name": "Message",
+  "description": "Сообщение клиента",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "content": {
+      "type": "string",
+      "required": true
+    },
+    "user": {
+      "type": "string",
+      "required": true
+    },
+    "chat": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "user": {
+      "type": "belongsTo",
+      "model": "User",
+      "foreignKey": "userId",
+      "description": "Автор сообщения"
+
+    },
+    "chat": {
+      "type": "belongsTo",
+      "model": "Chat",
+      "foreignKey": "chatId",
+      "description": "Чат сообщения"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

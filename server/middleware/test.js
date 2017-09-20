@@ -1,10 +1,13 @@
 const app = require('../server');
 
 module.exports = {
-  first: async () => {
-    const docs = await app.models.Doctors.find();
+  first:  () => {
+    // const docs = await app.models.Doctors.find();
     // console.log('docs from await', docs);
+// console.log(app.models);
 
+    app.models.Chat.find()
+      .then(res => { console.log(res); });
     // app.models.Contacts.count((error, count) => {
     //   console.log(count);
     // });
